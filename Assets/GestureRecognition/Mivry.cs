@@ -69,7 +69,6 @@ using static GestureCompletionData;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.UIElements;
-using static GestureCompletionData;
 #endif
 #if UNITY_ANDROID
 using UnityEngine.Networking;
