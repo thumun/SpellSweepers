@@ -5,6 +5,7 @@ using UnityEngine;
 using BTAI;
 using UnityEngine.Experimental.XR.Interaction;
 using System.Threading;
+using UnityEngine.InputSystem.HID;
 
 public class CatBehavior : MonoBehaviour
 {
@@ -42,8 +43,8 @@ public class CatBehavior : MonoBehaviour
 				),
 				BT.If(() => this.causeMischief).OpenBranch(
 					BT.RunCoroutine(KnockOver)
-				),
-				BT.RunCoroutine(Wander)
+				)
+				//BT.RunCoroutine(Wander)
 			)
 		);
 
@@ -55,7 +56,22 @@ public class CatBehavior : MonoBehaviour
     {
         btRoot.Tick();
 
+		// testing purposes --> testing the control spell 
+		if (Input.GetKeyDown(KeyCode.W))
+		{
+			controlCat = true;
+			Debug.Log($"Control Cat?: {controlCat}");
+		}
+
+		// testing purposes --> mischief 
+		if (Input.GetKeyDown(KeyCode.A))
+		{
+			Mischief();
+			Debug.Log($"Mischief: {controlCat}");
+		}
+
 		// maybe change this logic
+		/*
 		if (Mischief() && timer == 0.0f)
 		{
 			// initiate timer 
@@ -66,50 +82,54 @@ public class CatBehavior : MonoBehaviour
 				timer = 0.0f;
 			}
 		}
+		*/
 
 	}
 
 	// is cat going to knock something over? 
-	public bool Mischief()
+	private void Mischief()
 	{
-		return Random.value > 0.7f;
+		//causeMischief =  Random.value > 0.7f;
+		//Debug.Log($"Michief bool: {causeMischief}");
+		causeMischief = true;
 	}
 
 	// only happens if mischief true 
 	IEnumerator<BTState> KnockOver()
 	{
+		Debug.Log("Initiate Knock Over");
+		causeMischief = false;
 		// find object in range with collision (sphere)
 		bool objfound = false;
 		var colliders = Physics.OverlapSphere(transform.position, 100);
 
-		foreach (var hit in colliders)
-		{
-			if (!hit)
-				continue;
+		int rndIndx = -1; 
 
-			if (hit.transform.CompareTag("KnockOver"))
+		while (!objfound)
+		{
+			rndIndx = Random.Range(0, colliders.Length);
+
+			if (!colliders[rndIndx])
 			{
-				agent.SetDestination(hit.transform.position);
-				// hopefully collider will just knock over? 
-				objfound = true;
-				break;
+				continue;
 			}
 
+			if (colliders[rndIndx].transform.CompareTag("KnockOver"))
+			{
+				agent.SetDestination(colliders[rndIndx].transform.position);
+				// hopefully collider will just knock over? 
+				objfound = true;
+				yield return BTState.Success;
+			}
 		}
 
-		if (objfound)
-		{
-			yield return BTState.Success;
-		}
-		else
-		{
-			yield return BTState.Failure;
-		}
+		yield return BTState.Failure;
 	}
 
 	// happens if control spell used on cat 
 	IEnumerator<BTState> Flee()
 	{
+		Debug.Log("Initiate Flee"); 
 		controlCat = false;
 
 		if (Vector3.Distance(player.transform.position, agent.transform.position) <= 4.0f)
