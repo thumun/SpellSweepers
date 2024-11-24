@@ -1042,13 +1042,13 @@ MonoBehaviour:
   unityXrPlugin: 0
   mivryCoordinateSystem: 0
   LeftHand: {fileID: 802511587}
-  LeftTriggerInput: LeftControllerTrigger
-  LeftTriggerInputType: 1
+  LeftTriggerInput: <XRController>{LeftHand}/trigger
+  LeftTriggerInputType: 0
   LeftTriggerValue: 0
   LeftTriggerThreshold: 0.9
   RightHand: {fileID: 1558187837}
-  RightTriggerInput: RightControllerTrigger
-  RightTriggerInputType: 1
+  RightTriggerInput: <XRController>{RightHand}/trigger
+  RightTriggerInputType: 0
   RightTriggerValue: 0
   RightTriggerThreshold: 0.9
   ContinuousGestureRecognition: 0

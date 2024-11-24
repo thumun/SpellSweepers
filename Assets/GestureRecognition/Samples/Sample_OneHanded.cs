@@ -270,8 +270,18 @@ public class Sample_OneHanded : MonoBehaviour
         if (Keyboard.current.escapeKey.wasPressedThisFrame) {
             Application.Quit();
         }
-        float trigger_left = Sample_Utils.getInputControlValue("<XRController>{LeftHand}/trigger");
-        float trigger_right = Sample_Utils.getInputControlValue("<XRController>{RightHand}/trigger");
+		//float trigger_left = Sample_Utils.getInputControlValue("<XRController>{LeftHand}/trigger");
+		//float trigger_right = Sample_Utils.getInputControlValue("<XRController>{RightHand}/trigger");
+
+		OVRInput.Update();
+		OVRInput.FixedUpdate();
+
+		float trigger_left = OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger) ? 1.0f : 0.0f;
+		float trigger_right = OVRInput.Get(OVRInput.Button.SecondaryIndexTrigger) ? 1.0f : 0.0f;
+
+        Debug.Log($"Left Trigger: {trigger_left}");
+		Debug.Log($"Right Trigger: {trigger_right}");
+
 #else
         float escape = Input.GetAxis("escape");
         if (escape > 0.0f)
@@ -282,7 +292,7 @@ public class Sample_OneHanded : MonoBehaviour
         float trigger_right = Input.GetAxis("RightControllerTrigger");
 #endif
 
-        bool button_a_left = Input.GetButton("LeftControllerButtonA");
+		bool button_a_left = Input.GetButton("LeftControllerButtonA");
         bool button_a_right = Input.GetButton("RightControllerButtonA");
         if (button_a_pressed)
         {
@@ -346,11 +356,11 @@ public class Sample_OneHanded : MonoBehaviour
         // If the user is not yet dragging (pressing the trigger) on either controller, he hasn't started a gesture yet.
         if (active_controller == null) {
             // If the user presses either controller's trigger, we start a new gesture.
-            if (trigger_right > 0.9) {
+            if (trigger_right > 0.0f) {
                 // Right controller trigger pressed.
                 active_controller = GameObject.Find("Right Hand");
                 active_controller_pointer = GameObject.FindGameObjectWithTag("Right Pointer");
-            } else if (trigger_left > 0.9) {
+            } else if (trigger_left > 0.0f) {
                 // Left controller trigger pressed.
                 active_controller = GameObject.Find("Left Hand");
                 active_controller_pointer = GameObject.FindGameObjectWithTag("Left Pointer");
@@ -365,7 +375,7 @@ public class Sample_OneHanded : MonoBehaviour
 
         // If we arrive here, the user is currently dragging with one of the controllers.
         // Check if the user is still dragging or if he let go of the trigger button.
-        if (trigger_left > 0.85 || trigger_right > 0.85) {
+        if (trigger_left > 0.0f || trigger_right > 0.0f) {
             // The user is still dragging with the controller: continue the gesture.
             gr.updateHeadPosition(hmd_p, hmd_q);
             Vector3 p = active_controller.transform.position;
