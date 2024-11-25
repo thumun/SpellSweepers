@@ -56,6 +56,12 @@ public class IngredientController : MonoBehaviour
             m_rigidbody.angularDrag = airAngularDrag;
         }
     }
+    
+    // Function to handle clean up of drops
+    public void Interact()
+    {
+
+    }
 
     public void CauldronExploded() {
         inCauldron = false;
