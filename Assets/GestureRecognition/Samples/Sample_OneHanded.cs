@@ -52,6 +52,8 @@ public class Sample_OneHanded : MonoBehaviour
     // Leave emtpy for free version of MiVRy.
     [SerializeField] public string LicenseKey;
 
+    public GameObject startest;
+
     // The gesture recognition object:
     // You can have as many of these as you want simultaneously.
     private GestureRecognition gr = new GestureRecognition();
@@ -59,11 +61,13 @@ public class Sample_OneHanded : MonoBehaviour
     // The text field to display instructions.
     private Text HUDText;
 
-    // The game object associated with the currently active controller (if any):
-    private GameObject           active_controller = null;
+	// The game object associated with the currently active controller (if any):
+	[SerializeField]
+	private GameObject active_controller = null;
 
-    // The pointing tip of the active_controller (used for visualization).
-    private GameObject active_controller_pointer = null;
+	// The pointing tip of the active_controller (used for visualization).
+	[SerializeField]
+	private GameObject active_controller_pointer = null;
 
     // The game object associated with the currently active controller (if any):
     private bool button_a_pressed = false;
@@ -97,19 +101,20 @@ public class Sample_OneHanded : MonoBehaviour
     void SetActiveControllerModel(string side, string type)
     {
         GameObject controller_oculus = controller_gameobjs["controller_oculus_" + side];
-        GameObject controller_vive = controller_gameobjs["controller_vive_" + side];
-        GameObject controller_microsoft = controller_gameobjs["controller_microsoft_" + side];
-        GameObject controller_index = controller_gameobjs["controller_index_" + side];
-        GameObject controller_dummy = controller_gameobjs["controller_dummy_" + side];
+        //GameObject controller_vive = controller_gameobjs["controller_vive_" + side];
+        //GameObject controller_microsoft = controller_gameobjs["controller_microsoft_" + side];
+        //GameObject controller_index = controller_gameobjs["controller_index_" + side];
+        //GameObject controller_dummy = controller_gameobjs["controller_dummy_" + side];
         controller_oculus.SetActive(false);
-        controller_vive.SetActive(false);
-        controller_microsoft.SetActive(false);
-        controller_index.SetActive(false);
-        controller_dummy.SetActive(false);
+        //controller_vive.SetActive(false);
+        //controller_microsoft.SetActive(false);
+        //controller_index.SetActive(false);
+        //controller_dummy.SetActive(false);
         if (type.Contains("Oculus")) // "Oculus Touch Controller OpenXR"
         {
             controller_oculus.SetActive(true);
         }
+        /*
         else if (type.Contains("Windows MR")) // "Windows MR Controller OpenXR"
         {
             controller_microsoft.SetActive(true);
@@ -126,6 +131,7 @@ public class Sample_OneHanded : MonoBehaviour
         {
             controller_dummy.SetActive(true);
         }
+        */
     }
 
     // Helper function to handle new VR controllers being detected.
@@ -230,25 +236,25 @@ public class Sample_OneHanded : MonoBehaviour
 
         controller_gameobjs["controller_oculus_left"] = GameObject.Find("controller_oculus_left");
         controller_gameobjs["controller_oculus_right"] = GameObject.Find("controller_oculus_right");
-        controller_gameobjs["controller_vive_left"] = GameObject.Find("controller_vive_left");
-        controller_gameobjs["controller_vive_right"] = GameObject.Find("controller_vive_right");
-        controller_gameobjs["controller_microsoft_left"] = GameObject.Find("controller_microsoft_left");
-        controller_gameobjs["controller_microsoft_right"] = GameObject.Find("controller_microsoft_right");
-        controller_gameobjs["controller_index_left"] = GameObject.Find("controller_index_left");
-        controller_gameobjs["controller_index_right"] = GameObject.Find("controller_index_right");
-        controller_gameobjs["controller_dummy_left"] = GameObject.Find("controller_dummy_left");
-        controller_gameobjs["controller_dummy_right"] = GameObject.Find("controller_dummy_right");
+        //controller_gameobjs["controller_vive_left"] = GameObject.Find("controller_vive_left");
+        //controller_gameobjs["controller_vive_right"] = GameObject.Find("controller_vive_right");
+        //controller_gameobjs["controller_microsoft_left"] = GameObject.Find("controller_microsoft_left");
+        //controller_gameobjs["controller_microsoft_right"] = GameObject.Find("controller_microsoft_right");
+        //controller_gameobjs["controller_index_left"] = GameObject.Find("controller_index_left");
+        //controller_gameobjs["controller_index_right"] = GameObject.Find("controller_index_right");
+        //controller_gameobjs["controller_dummy_left"] = GameObject.Find("controller_dummy_left");
+        //controller_gameobjs["controller_dummy_right"] = GameObject.Find("controller_dummy_right");
 
         controller_gameobjs["controller_oculus_left"].SetActive(false);
         controller_gameobjs["controller_oculus_right"].SetActive(false);
-        controller_gameobjs["controller_vive_left"].SetActive(false);
-        controller_gameobjs["controller_vive_right"].SetActive(false);
-        controller_gameobjs["controller_microsoft_left"].SetActive(false);
-        controller_gameobjs["controller_microsoft_right"].SetActive(false);
-        controller_gameobjs["controller_index_left"].SetActive(false);
-        controller_gameobjs["controller_index_right"].SetActive(false);
-        controller_gameobjs["controller_dummy_left"].SetActive(false);
-        controller_gameobjs["controller_dummy_right"].SetActive(false);
+        //controller_gameobjs["controller_vive_left"].SetActive(false);
+        //controller_gameobjs["controller_vive_right"].SetActive(false);
+        //controller_gameobjs["controller_microsoft_left"].SetActive(false);
+        //controller_gameobjs["controller_microsoft_right"].SetActive(false);
+        //controller_gameobjs["controller_index_left"].SetActive(false);
+        //controller_gameobjs["controller_index_right"].SetActive(false);
+        //controller_gameobjs["controller_dummy_left"].SetActive(false);
+        //controller_gameobjs["controller_dummy_right"].SetActive(false);
 
         InputDevices.deviceConnected += DeviceConnected;
         List<InputDevice> devices = new List<InputDevice>();
@@ -292,9 +298,13 @@ public class Sample_OneHanded : MonoBehaviour
         float trigger_right = Input.GetAxis("RightControllerTrigger");
 #endif
 
-		bool button_a_left = Input.GetButton("LeftControllerButtonA");
-        bool button_a_right = Input.GetButton("RightControllerButtonA");
-        if (button_a_pressed)
+		//bool button_a_left = Input.GetButton("LeftControllerButtonA");
+		//bool button_a_right = Input.GetButton("RightControllerButtonA");
+
+		bool button_a_left = OVRInput.Get(OVRInput.Button.One);
+        bool button_a_right = OVRInput.Get(OVRInput.Button.One);
+
+		if (button_a_pressed)
         {
             if (!button_a_left && !button_a_right)
             {
@@ -358,11 +368,11 @@ public class Sample_OneHanded : MonoBehaviour
             // If the user presses either controller's trigger, we start a new gesture.
             if (trigger_right > 0.0f) {
                 // Right controller trigger pressed.
-                active_controller = GameObject.Find("Right Hand");
+                active_controller = GameObject.Find("RightHandAnchor");
                 active_controller_pointer = GameObject.FindGameObjectWithTag("Right Pointer");
             } else if (trigger_left > 0.0f) {
                 // Left controller trigger pressed.
-                active_controller = GameObject.Find("Left Hand");
+                active_controller = GameObject.Find("LeftHandAnchor");
                 active_controller_pointer = GameObject.FindGameObjectWithTag("Left Pointer");
             } else {
                 // If we arrive here, the user is pressing neither controller's trigger:
@@ -383,7 +393,7 @@ public class Sample_OneHanded : MonoBehaviour
             gr.contdStrokeQ(p, q);
             // Show the stroke by instatiating new objects
             p = active_controller_pointer.transform.position;
-            GameObject star_instance = Instantiate(GameObject.Find("star"));
+            GameObject star_instance = Instantiate(startest);
             GameObject star = new GameObject("stroke_" + stroke_index++);
             star_instance.name = star.name + "_instance";
             star_instance.transform.SetParent(star.transform, false);
