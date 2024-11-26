@@ -439,6 +439,7 @@ public class SpellCasting : MonoBehaviour
 				}
 				//return hitInfo.transform;
 			}
+            
 
 			Ray rightRay = new Ray(rightLaser.position, rightLaser.forward);
 			bool rightHit = !leftHit && Physics.Raycast(rightRay, out hitInfo);
