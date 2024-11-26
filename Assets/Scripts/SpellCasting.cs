@@ -63,6 +63,12 @@ public class SpellCasting : MonoBehaviour
 
     public Transform selectedObject; 
 
+    // for control spell
+    private bool ctrlActive = false;
+
+    [SerializeField]
+    private GameObject active_controller_move = null;
+
     //************************************************************
 
     // The gesture recognition object:
@@ -286,7 +292,9 @@ public class SpellCasting : MonoBehaviour
 			}
         }
 
-        /*
+        ControlSpell();
+
+		/*
 		if (button_a_pressed)
         {
             if (!button_a_left && !button_a_right)
@@ -297,7 +305,7 @@ public class SpellCasting : MonoBehaviour
         }
         */
 
-        GameObject hmd = Camera.main.gameObject; // alternative: GameObject.Find("Main Camera");
+		GameObject hmd = Camera.main.gameObject; // alternative: GameObject.Find("Main Camera");
         Vector3 hmd_p = hmd.transform.position;
         Quaternion hmd_q = hmd.transform.rotation;
 
@@ -308,11 +316,14 @@ public class SpellCasting : MonoBehaviour
                 // Right controller trigger pressed.
                 active_controller = GameObject.Find("RightHandAnchor");
                 active_controller_pointer = GameObject.FindGameObjectWithTag("Right Pointer");
-            } else if (trigger_left > 0.0f) {
+                active_controller_move = GameObject.Find("RightControllerMove");
+
+			} else if (trigger_left > 0.0f) {
                 // Left controller trigger pressed.
                 active_controller = GameObject.Find("LeftHandAnchor");
                 active_controller_pointer = GameObject.FindGameObjectWithTag("Left Pointer");
-            } else {
+				active_controller_move = GameObject.Find("LeftControllerMove");
+			} else {
                 // If we arrive here, the user is pressing neither controller's trigger:
                 // nothing to do.
                 return;
@@ -382,8 +393,9 @@ public class SpellCasting : MonoBehaviour
         {
             // "loop"-gesture: create cylinder
             HUDText.text = "Identified Control Spell";
-           
-        }
+            ctrlActive = !ctrlActive;
+            ControlSpell();
+		}
         else if (gesture_id == 1 || gesture_id == 2 || gesture_id == 3)
         {
             // "swipe left"-gesture: rotate left
@@ -404,17 +416,28 @@ public class SpellCasting : MonoBehaviour
 
     void ControlSpell()
     {
-        // check if item was selected 
-        if (selectedObject != null)
+        if (ctrlActive)
         {
-            // need to lerp from current position to new position in front of controller? 
+			// check if item was selected 
+			if (selectedObject != null)
+			{
+				// get active controller item 
+				// obj position = the test position 
+				//selectedObject.transform.position = active_controller_move.transform.position;
+				selectedObject.transform.position = Vector3.Lerp(selectedObject.transform.position, active_controller_move.transform.position, Time.deltaTime);
+                Debug.Log("Moving");
+			}
+			else
+			{
+				Debug.Log("Need to select an item");
+			}
+		}
 
-
-        }
         else
         {
-            Debug.Log("Need to select an item");
+            // drop object - do I need to explicitly do this 
         }
+		
     }
 
     
