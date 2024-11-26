@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 2138677392}
-  m_IndirectSpecularColor: {r: 0.43041003, g: 0.67091674, b: 0.73975414, a: 1}
+  m_IndirectSpecularColor: {r: 0.48834762, g: 0.076842375, b: 0.08472091, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1782,8 +1782,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5101dd8721cfaae4ca87472069ebe8a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LoadGesturesFile: Samples/Sample_OneHanded_Gestures.dat
-  SaveGesturesFile: Sample_OneHanded_MyRecordedGestures.dat
+  LoadGesturesFile: Sample_Spells.dat
+  SaveGesturesFile: Sample_Spells.dat
   LicenseName: 
   LicenseKey: 
   startest: {fileID: 779522438}
