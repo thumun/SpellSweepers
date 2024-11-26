@@ -32,12 +32,13 @@ public class CauldronController : MonoBehaviour
     private float liquidSurfaceHeight;
 
     private int timeToExplode;
-    private int explosionTime = 2000;
+    private int explosionTime = 20000;
     // min scale = 0.13, max scale = 0.53;
     private float scaleDiff = 0.4f;
 
     private bool shouldExplode = false;
     private bool exploded = false;
+    private bool solved = false;
 
     public float explosionForce;
     public float explosionRadius;
@@ -51,12 +52,15 @@ public class CauldronController : MonoBehaviour
         liquidSurface.SetActive(true);
 
         liquidSurfaceHeight = liquidSurface.transform.position.y;
+
+        requiredRecipe.Add("IngRed");
+        requiredRecipe.Add("IngBlue");
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (exploded) return;
+        if (exploded || solved) return;
 
         IncrementTimeToExplode(1);
         if (timeToExplode >= explosionTime) {
@@ -73,15 +77,28 @@ public class CauldronController : MonoBehaviour
     }
 
     public void AddNewIngredient(string ingredient) {
+        if (exploded || solved) return;
+        
         currentFloaters.Add(ingredient);
         if (!requiredRecipe.Contains(ingredient)) {
             // Accelerate time to explode
-            IncrementTimeToExplode(100);
+            IncrementTimeToExplode(1000);
+        } else {
+            bool allContains = true;
+            foreach (string ing in requiredRecipe) {
+                if (!currentFloaters.Contains(ing)) {
+                    allContains = false;
+                    break;
+                }
+            }
+            if (allContains) {
+                solved = true;
+            }
         }
     }
 
     public void IncrementTimeToExplode(int t) {
-        timeToExplode += t;
+        timeToExplode = Mathf.Min(explosionTime, timeToExplode + t);
         liquidSurface.transform.localScale += new Vector3(0, 0, 1) * scaleDiff / (float)explosionTime;
     }
 
