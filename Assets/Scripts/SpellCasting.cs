@@ -34,6 +34,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 using System.Linq.Expressions;
 using Palmmedia.ReportGenerator.Core.CodeAnalysis;
+using System.Security;
 #endif
 
 public class SpellCasting : MonoBehaviour
@@ -78,7 +79,8 @@ public class SpellCasting : MonoBehaviour
 	public GameObject LeftPtrRef = null;
 	public GameObject LeftMoveRef = null;
 
-
+    internal enum SPELLS { NONE, CONTROL, SLOWDOWN, VACUUM }
+    internal SPELLS currentSpell = SPELLS.NONE;
 	//************************************************************
 
 	// The gesture recognition object:
@@ -289,8 +291,15 @@ public class SpellCasting : MonoBehaviour
         bool button_a_right = OVRInput.Get(OVRInput.Button.Two);
 
         // if button pressed -> select object (if object exists with knock over tag) 
-        if (button_a_left || button_a_right)
+        if ((button_a_left || button_a_right) && currentSpell != SPELLS.NONE)
         {
+            if (selectedObject != null && currentSpell == SPELLS.CONTROL)
+            {
+                ctrlActive = false; 
+
+			}
+
+
             bool debugHit = CheckHitObject();
             if (debugHit)
             {
@@ -302,7 +311,12 @@ public class SpellCasting : MonoBehaviour
 			}
         }
 
-        ControlSpell();
+        if (currentSpell == SPELLS.CONTROL && selectedObject != null)
+        {
+			ControlSpell();
+		}
+        // add for other spells!! 
+        
 
 		/*
 		if (button_a_pressed)
@@ -416,17 +430,20 @@ public class SpellCasting : MonoBehaviour
         {
             // "loop"-gesture: create cylinder
             HUDText.text = "Identified Control Spell";
+            currentSpell = SPELLS.CONTROL;
             ctrlActive = !ctrlActive;
 		}
         else if (gesture_id == 1 || gesture_id == 2 || gesture_id == 3)
         {
             // "swipe left"-gesture: rotate left
             HUDText.text = "Identified Vaccuum Spell";
-            
-        }
+			currentSpell = SPELLS.VACUUM;
+
+		}
         else if (gesture_id == 4)
         {
             HUDText.text = "Identified Slow Down Spell";
+            currentSpell = SPELLS.SLOWDOWN;
             
         }
         else
@@ -463,7 +480,7 @@ public class SpellCasting : MonoBehaviour
             // drop object - do I need to explicitly do this 
             if (selectedObject != null)
             {
-				selectedObject.GetComponent<Rigidbody>().isKinematic = true;
+				//selectedObject.GetComponent<Rigidbody>().isKinematic = true;
 				selectedObject.GetComponent<Rigidbody>().useGravity = true;
 			}
 		}
