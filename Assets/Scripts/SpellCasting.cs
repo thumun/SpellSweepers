@@ -33,6 +33,7 @@ using UnityEngine.Networking;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 using System.Linq.Expressions;
+using Palmmedia.ReportGenerator.Core.CodeAnalysis;
 #endif
 
 public class SpellCasting : MonoBehaviour
@@ -69,11 +70,20 @@ public class SpellCasting : MonoBehaviour
     [SerializeField]
     private GameObject active_controller_move = null;
 
-    //************************************************************
+    public GameObject RightHandRef = null;
+    public GameObject RightPtrRef = null;
+    public GameObject RightMoveRef = null; 
 
-    // The gesture recognition object:
-    // You can have as many of these as you want simultaneously.
-    private GestureRecognition gr = new GestureRecognition();
+    public GameObject LeftHandRef = null;
+	public GameObject LeftPtrRef = null;
+	public GameObject LeftMoveRef = null;
+
+
+	//************************************************************
+
+	// The gesture recognition object:
+	// You can have as many of these as you want simultaneously.
+	private GestureRecognition gr = new GestureRecognition();
 
     // The text field to display instructions.
     private Text HUDText;
@@ -314,15 +324,28 @@ public class SpellCasting : MonoBehaviour
             // If the user presses either controller's trigger, we start a new gesture.
             if (trigger_right > 0.0f) {
                 // Right controller trigger pressed.
+                /*
                 active_controller = GameObject.Find("RightHandAnchor");
                 active_controller_pointer = GameObject.FindGameObjectWithTag("Right Pointer");
                 active_controller_move = GameObject.Find("RightControllerMove");
+                */
+
+                active_controller = RightHandRef;
+                active_controller_pointer = RightPtrRef;
+                active_controller_move = RightMoveRef;
 
 			} else if (trigger_left > 0.0f) {
-                // Left controller trigger pressed.
+				// Left controller trigger pressed.
+				/*
                 active_controller = GameObject.Find("LeftHandAnchor");
                 active_controller_pointer = GameObject.FindGameObjectWithTag("Left Pointer");
 				active_controller_move = GameObject.Find("LeftControllerMove");
+                */
+
+				active_controller = LeftHandRef;
+				active_controller_pointer = LeftPtrRef;
+				active_controller_move = LeftMoveRef;
+
 			} else {
                 // If we arrive here, the user is pressing neither controller's trigger:
                 // nothing to do.
@@ -394,12 +417,11 @@ public class SpellCasting : MonoBehaviour
             // "loop"-gesture: create cylinder
             HUDText.text = "Identified Control Spell";
             ctrlActive = !ctrlActive;
-            ControlSpell();
 		}
         else if (gesture_id == 1 || gesture_id == 2 || gesture_id == 3)
         {
             // "swipe left"-gesture: rotate left
-            HUDText.text = "Identified Vaccum Spell";
+            HUDText.text = "Identified Vaccuum Spell";
             
         }
         else if (gesture_id == 4)
@@ -425,7 +447,10 @@ public class SpellCasting : MonoBehaviour
 				// obj position = the test position 
 				//selectedObject.transform.position = active_controller_move.transform.position;
 				selectedObject.transform.position = Vector3.Lerp(selectedObject.transform.position, active_controller_move.transform.position, Time.deltaTime);
-                Debug.Log("Moving");
+                selectedObject.GetComponent<Rigidbody>().isKinematic = false;
+                selectedObject.GetComponent<Rigidbody>().useGravity = false; 
+
+				Debug.Log("Moving");
 			}
 			else
 			{
@@ -436,7 +461,12 @@ public class SpellCasting : MonoBehaviour
         else
         {
             // drop object - do I need to explicitly do this 
-        }
+            if (selectedObject != null)
+            {
+				selectedObject.GetComponent<Rigidbody>().isKinematic = true;
+				selectedObject.GetComponent<Rigidbody>().useGravity = true;
+			}
+		}
 		
     }
 
@@ -446,7 +476,7 @@ public class SpellCasting : MonoBehaviour
 	private bool CheckHitObject()
 	{
 
-		if (leftLaser && rightLaser)
+		if (leftLaser || rightLaser)
 		{
 		    RaycastHit hitInfo = new RaycastHit();
 
