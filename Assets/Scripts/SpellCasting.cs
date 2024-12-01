@@ -453,6 +453,8 @@ public class SpellCasting : MonoBehaviour
         }
     }
 
+    // might need to check the tag for each selected obj 
+
     void ControlSpell()
     {
         if (ctrlActive)
@@ -486,7 +488,28 @@ public class SpellCasting : MonoBehaviour
 		}
 		
     }
+    void VacuumSpell()
+    {
+        // check if spell is active 
 
+        // set cone active 
+        // check intersection with cone in front of wand
+        // if dust bunny -> make dust bunny disappear and append to dust bunny counter 
+        // else attach to cone 
+
+        // if not active 
+        // get rid of cone
+    }
+
+    void SlowDown()
+    {
+        // one time use spell 
+        
+        // get intersection 
+        // if intersection with cat -> trigger cat bool 
+
+        // if intersection with cauldron --> increase cauldron time  
+    }
     
     // this is called when the player clicks A or X on the controller 
     // this will select an object 
