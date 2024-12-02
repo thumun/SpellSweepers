@@ -43,8 +43,8 @@ public class CatBehavior : MonoBehaviour
 				),
 				BT.If(() => this.causeMischief).OpenBranch(
 					BT.RunCoroutine(KnockOver)
-				),
-				BT.RunCoroutine(Wander)
+				)/*,*/
+				//BT.RunCoroutine(Wander)
 			)
 		);
 
