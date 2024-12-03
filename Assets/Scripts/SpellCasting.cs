@@ -35,6 +35,9 @@ using UnityEngine.InputSystem.Controls;
 using System.Linq.Expressions;
 using Palmmedia.ReportGenerator.Core.CodeAnalysis;
 using System.Security;
+using UnityEditor.Search;
+using UnityEditor.PackageManager;
+
 #endif
 
 public class SpellCasting : MonoBehaviour
@@ -67,6 +70,10 @@ public class SpellCasting : MonoBehaviour
 
     // for control spell
     private bool ctrlActive = false;
+    // for slow down spell 
+    private bool slowActive = false;
+    // for vacuum spell 
+    private bool vacuumActive = false; 
 
     [SerializeField]
     private GameObject active_controller_move = null;
@@ -316,18 +323,11 @@ public class SpellCasting : MonoBehaviour
 			ControlSpell();
 		}
         // add for other spells!! 
-        
 
-		/*
-		if (button_a_pressed)
+        else if (currentSpell == SPELLS.SLOWDOWN && selectedObject != null)
         {
-            if (!button_a_left && !button_a_right)
-            {
-                button_a_pressed = false;
-            }
-            return;
-        }
-        */
+            SlowDown();
+		}
 
 		GameObject hmd = Camera.main.gameObject; // alternative: GameObject.Find("Main Camera");
         Vector3 hmd_p = hmd.transform.position;
@@ -337,25 +337,11 @@ public class SpellCasting : MonoBehaviour
         if (active_controller == null) {
             // If the user presses either controller's trigger, we start a new gesture.
             if (trigger_right > 0.0f) {
-                // Right controller trigger pressed.
-                /*
-                active_controller = GameObject.Find("RightHandAnchor");
-                active_controller_pointer = GameObject.FindGameObjectWithTag("Right Pointer");
-                active_controller_move = GameObject.Find("RightControllerMove");
-                */
-
                 active_controller = RightHandRef;
                 active_controller_pointer = RightPtrRef;
                 active_controller_move = RightMoveRef;
 
 			} else if (trigger_left > 0.0f) {
-				// Left controller trigger pressed.
-				/*
-                active_controller = GameObject.Find("LeftHandAnchor");
-                active_controller_pointer = GameObject.FindGameObjectWithTag("Left Pointer");
-				active_controller_move = GameObject.Find("LeftControllerMove");
-                */
-
 				active_controller = LeftHandRef;
 				active_controller_pointer = LeftPtrRef;
 				active_controller_move = LeftMoveRef;
@@ -460,7 +446,7 @@ public class SpellCasting : MonoBehaviour
         if (ctrlActive)
         {
 			// check if item was selected 
-			if (selectedObject != null)
+			if (selectedObject != null && selectedObject.CompareTag("KnockOver"))
 			{
 				// get active controller item 
 				// obj position = the test position 
@@ -492,24 +478,43 @@ public class SpellCasting : MonoBehaviour
     {
         // check if spell is active 
 
-        // set cone active 
-        // check intersection with cone in front of wand
-        // if dust bunny -> make dust bunny disappear and append to dust bunny counter 
-        // else attach to cone 
+        if (vacuumActive)
+        {
+			// set cone active 
 
-        // if not active 
-        // get rid of cone
-    }
+
+			// check intersection with cone in front of wand
+			// if dust bunny -> make dust bunny disappear and append to dust bunny counter 
+			// else attach to cone 
+
+			// if not active 
+			// get rid of cone
+		}
+	}
 
     void SlowDown()
-    {
-        // one time use spell 
-        
-        // get intersection 
-        // if intersection with cat -> trigger cat bool 
+	{
+		// one time use spell 
 
-        // if intersection with cauldron --> increase cauldron time  
-    }
+        if (slowActive)
+        {
+			if (selectedObject != null && selectedObject.CompareTag("Cauldron"))
+			{
+                // lower time 
+                CauldronController cauldron = selectedObject.GetComponent<CauldronController>();
+                cauldron.timeToExplode -= 500;
+				slowActive = false; 
+			}
+
+            else if (selectedObject != null && selectedObject.CompareTag("Cat"))
+            {
+                // activate flee condition 
+                CatBehavior cat = selectedObject.GetComponent<CatBehavior>();
+                cat.slowDown = true; 
+                slowActive = false; 
+            }
+		}
+	}
     
     // this is called when the player clicks A or X on the controller 
     // this will select an object 
@@ -524,12 +529,13 @@ public class SpellCasting : MonoBehaviour
 			bool leftHit = Physics.Raycast(leftRay, out hitInfo);
 			if (leftHit)
 			{
-                if (hitInfo.transform.CompareTag("KnockOver"))
+                if (hitInfo.transform.CompareTag("KnockOver") || hitInfo.transform.CompareTag("Cauldron") || hitInfo.transform.CompareTag("Cat"))
                 {
 					// select object 
 					selectedObject = hitInfo.transform;
 					return true;
 				}
+
 				//return hitInfo.transform;
 			}
             
@@ -538,12 +544,13 @@ public class SpellCasting : MonoBehaviour
 			bool rightHit = !leftHit && Physics.Raycast(rightRay, out hitInfo);
 			if (rightHit)
 			{
-				if (hitInfo.transform.CompareTag("KnockOver"))
+				if (hitInfo.transform.CompareTag("KnockOver") || hitInfo.transform.CompareTag("Cauldron") || hitInfo.transform.CompareTag("Cat"))
 				{
 					// select object 
 					selectedObject = hitInfo.transform;
 					return true; 
 				}
+
 				//return hitInfo.transform;
 			}
 		}

@@ -31,7 +31,7 @@ public class CauldronController : MonoBehaviour
 
     private float liquidSurfaceHeight;
 
-    private int timeToExplode;
+    public int timeToExplode;
     private int explosionTime = 20000;
     // min scale = 0.13, max scale = 0.53;
     private float scaleDiff = 0.4f;

@@ -9,6 +9,7 @@ TagManager:
   - KnockOver
   - Cauldron
   - CauldronSurface
+  - Cat
   layers:
   - Default
   - TransparentFX

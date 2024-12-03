@@ -1169,7 +1169,7 @@ GameObject:
   - component: {fileID: 869648695}
   m_Layer: 0
   m_Name: OVRCameraRig
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1725,7 +1725,7 @@ GameObject:
   - component: {fileID: 1620741774}
   m_Layer: 0
   m_Name: Cat
-  m_TagString: Untagged
+  m_TagString: Cat
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1745,7 +1745,7 @@ MonoBehaviour:
   agent: {fileID: 0}
   player: {fileID: 869648694}
   radius: 3
-  controlCat: 0
+  slowDown: 0
 --- !u!195 &1620741775
 NavMeshAgent:
   m_ObjectHideFlags: 0

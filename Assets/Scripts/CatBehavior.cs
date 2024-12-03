@@ -16,7 +16,7 @@ public class CatBehavior : MonoBehaviour
 	public Transform player;
 	public float radius; // setting range for random travel 
 
-	public bool controlCat = false; // should be toggled if controlled!!
+	public bool slowDown = false; // should be toggled if controlled!!
 
 	// behavior tree root 
 	private Root btRoot = BT.Root();
@@ -38,7 +38,7 @@ public class CatBehavior : MonoBehaviour
 
 		btRoot.OpenBranch(
 			BT.Selector(false).OpenBranch(
-				BT.If(() => this.controlCat).OpenBranch(
+				BT.If(() => this.slowDown).OpenBranch(
 					BT.RunCoroutine(Flee)
 				),
 				BT.If(() => this.causeMischief).OpenBranch(
@@ -59,15 +59,15 @@ public class CatBehavior : MonoBehaviour
 		// testing purposes --> testing the control spell 
 		if (Input.GetKeyDown(KeyCode.W))
 		{
-			controlCat = true;
-			Debug.Log($"Control Cat?: {controlCat}");
+			slowDown = true;
+			Debug.Log($"Control Cat?: {slowDown}");
 		}
 
 		// testing purposes --> mischief 
 		if (Input.GetKeyDown(KeyCode.A))
 		{
 			Mischief();
-			Debug.Log($"Mischief: {controlCat}");
+			Debug.Log($"Mischief: {slowDown}");
 		}
 
 		// maybe change this logic
@@ -83,6 +83,8 @@ public class CatBehavior : MonoBehaviour
 			}
 		}
 		*/
+
+		// if x time goes by, turn off flee behavior 
 
 	}
 
@@ -130,7 +132,7 @@ public class CatBehavior : MonoBehaviour
 	IEnumerator<BTState> Flee()
 	{
 		Debug.Log("Initiate Flee"); 
-		controlCat = false;
+		slowDown = false;
 
 		if (Vector3.Distance(player.transform.position, agent.transform.position) <= 4.0f)
 		{
