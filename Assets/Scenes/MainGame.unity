@@ -1916,6 +1916,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: aebd02095413bdc4584c2db0f602ed83, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: aebd02095413bdc4584c2db0f602ed83, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: aebd02095413bdc4584c2db0f602ed83, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: aebd02095413bdc4584c2db0f602ed83, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.2772
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: aebd02095413bdc4584c2db0f602ed83, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2300002, guid: aebd02095413bdc4584c2db0f602ed83, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: -876546973899608171, guid: 831bccebf0ef8c745b8c58ad028d92f3, type: 3}
+    - target: {fileID: 3300002, guid: aebd02095413bdc4584c2db0f602ed83, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -4155961903284917212, guid: 831bccebf0ef8c745b8c58ad028d92f3, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -1984,6 +2012,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 400006, guid: b21f783f79fb0a74ea578cd19d45f14e, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 400006, guid: b21f783f79fb0a74ea578cd19d45f14e, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 400006, guid: b21f783f79fb0a74ea578cd19d45f14e, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 400006, guid: b21f783f79fb0a74ea578cd19d45f14e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.2772
+      objectReference: {fileID: 0}
+    - target: {fileID: 400006, guid: b21f783f79fb0a74ea578cd19d45f14e, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2300004, guid: b21f783f79fb0a74ea578cd19d45f14e, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: -876546973899608171, guid: 831bccebf0ef8c745b8c58ad028d92f3, type: 3}
+    - target: {fileID: 3300004, guid: b21f783f79fb0a74ea578cd19d45f14e, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -4155961903284917212, guid: 831bccebf0ef8c745b8c58ad028d92f3, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
