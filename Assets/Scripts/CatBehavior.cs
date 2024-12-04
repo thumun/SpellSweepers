@@ -22,15 +22,13 @@ public class CatBehavior : MonoBehaviour
 	private Root btRoot = BT.Root();
 	private float timer; 
 	private bool causeMischief = false;
+	private bool pauseTimer = false;
+
+	private Transform prevObj = null; 
     
 	// need to add anim controller for NPC 
 
-	// overarching idea of cat behavior: 
-	// wander around always -> via navemesh, set destination and check if path is viable; if path not viable then teleport 
-	// occassionally choose to knock over objects that are in range (get distance)
-	// water spritz -> add a condition to sequence (flee condition) 
-	// anything else?? 
-
+	
 	// Start is called before the first frame update
 	void Start()
     {
@@ -43,8 +41,8 @@ public class CatBehavior : MonoBehaviour
 				),
 				BT.If(() => this.causeMischief).OpenBranch(
 					BT.RunCoroutine(KnockOver)
-				)/*,*/
-				//BT.RunCoroutine(Wander)
+				),
+				BT.RunCoroutine(Wander)
 			)
 		);
 
@@ -56,6 +54,11 @@ public class CatBehavior : MonoBehaviour
     {
         btRoot.Tick();
 
+		if (!pauseTimer)
+		{
+			timer += Time.deltaTime;
+		}
+		
 		// testing purposes --> testing the control spell 
 		if (Input.GetKeyDown(KeyCode.W))
 		{
@@ -70,21 +73,30 @@ public class CatBehavior : MonoBehaviour
 			Debug.Log($"Mischief: {slowDown}");
 		}
 
-		// maybe change this logic
-		/*
-		if (Mischief() && timer == 0.0f)
+		// reset bool once cat goes to obj 
+		if (causeMischief && prevObj != null)
 		{
-			// initiate timer 
-			timer += Time.deltaTime;
-			if (timer > 5.0f)
+			if (Vector3.Distance(this.transform.position, prevObj.transform.position) <= 1.0f)
 			{
-				causeMischief = true;
-				timer = 0.0f;
+				causeMischief = false;
+				pauseTimer = false;
 			}
 		}
-		*/
 
-		// if x time goes by, turn off flee behavior 
+		// for calling mischief behavior 
+		if (timer > 10.0f && !slowDown)
+		{
+			causeMischief = true;
+			timer = 0.0f;
+			pauseTimer = true;
+		}
+
+		// for stopping flee
+		if (slowDown && timer > 10.0f)
+		{
+			timer = 0.0f;
+			slowDown = false;
+		}
 
 	}
 
@@ -116,11 +128,13 @@ public class CatBehavior : MonoBehaviour
 				continue;
 			}
 
-			if (colliders[rndIndx].transform.CompareTag("KnockOver"))
+			if (colliders[rndIndx].transform.CompareTag("KnockOver") && (prevObj == null || colliders[rndIndx].transform.name != prevObj.transform.name))
 			{
 				agent.SetDestination(colliders[rndIndx].transform.position);
 				// hopefully collider will just knock over? 
 				objfound = true;
+				prevObj = colliders[rndIndx].transform;
+				Debug.Log($"cat target obj: {colliders[rndIndx].transform.name}");
 				yield return BTState.Success;
 			}
 		}
@@ -161,9 +175,12 @@ public class CatBehavior : MonoBehaviour
 		randomDirection += transform.position;
 		NavMeshHit hit;
 		Vector3 finalPosition = Vector3.zero;
+
 		if (NavMesh.SamplePosition(randomDirection, out hit, radius, 1))
 		{
+
 			finalPosition = hit.position;
+			
 		}
 
 		agent.SetDestination(finalPosition);
