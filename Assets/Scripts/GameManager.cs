@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     private int dustBunnyCounter = 0;
 
     // Mana related
-    private int currentManaPoints = 100;
+    private int currentManaPoints = 10000;
     private int maxManaPoints = 100;
     private bool castingVacuum = false;
     public int spellControlCost = 10;
@@ -66,14 +66,14 @@ public class GameManager : MonoBehaviour
             }
         } else if (spellId == 1) {
             // Vacuum spell
-            if (castingVacuum) {
-                castingVacuum = false;
-                updated = true;
-            } else if (currentManaPoints >= spellVacuumCost) {
+            //if (castingVacuum) {
+            //    castingVacuum = false;
+            //    updated = true;
+            //} else if (currentManaPoints >= spellVacuumCost) {
                 castingVacuum = true;
                 currentManaPoints -= spellVacuumCost;
                 updated = true;
-            }
+            //}
         } else if (spellId == 2) {
             // Slow down spell
             if (currentManaPoints >= spellSlowDownCost) {
