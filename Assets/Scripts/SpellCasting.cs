@@ -440,14 +440,17 @@ public class SpellCasting : MonoBehaviour
             // "swipe left"-gesture: rotate left
             HUDText.text = "Identified Vaccuum Spell";
 			currentSpell = SPELLS.VACUUM;
+            vacuumActive = !vacuumActive;
 
 		}
         else if (gesture_id == 4)
         {
             HUDText.text = "Identified Slow Down Spell";
             currentSpell = SPELLS.SLOWDOWN;
-            
-        }
+            slowActive = !slowActive; 
+
+
+		}
         else
         {
             // Other ID: one of the user-registered gestures:
