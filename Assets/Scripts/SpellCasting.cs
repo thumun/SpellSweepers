@@ -75,7 +75,12 @@ public class SpellCasting : MonoBehaviour
     // for vacuum spell 
     private bool vacuumActive = false; 
 
+    private bool itemDropped = false; // hate this variable
+
     public List<Transform> vacuumObjects = new List<Transform>();
+
+    private List<Vector3> trackingPos = new List<Vector3>();
+    private float velocity = 1000f; 
 
     [SerializeField]
     private GameObject active_controller_move = null;
@@ -309,6 +314,8 @@ public class SpellCasting : MonoBehaviour
 				if (selectedObject != null && currentSpell == SPELLS.CONTROL)
 				{
 					ctrlActive = false;
+                    currentSpell = SPELLS.NONE;
+                    itemDropped = true;
 
 				}
 
@@ -320,6 +327,11 @@ public class SpellCasting : MonoBehaviour
 				else
 				{
 					Debug.Log("nothing selected");
+                    // deactivate spell 
+                    ctrlActive = false;
+                    vacuumActive = false;
+                    slowActive = false;
+					currentSpell = SPELLS.NONE;
 				}
 			}
 
@@ -328,6 +340,7 @@ public class SpellCasting : MonoBehaviour
                 // vacuum drop all items 
                 UnVacuum();
 				vacuumActive = false;   
+                currentSpell = SPELLS.NONE;
 			}
 			
         }
@@ -433,23 +446,22 @@ public class SpellCasting : MonoBehaviour
             // "loop"-gesture: create cylinder
             HUDText.text = "Identified Control Spell";
             currentSpell = SPELLS.CONTROL;
-            ctrlActive = !ctrlActive;
+            //ctrlActive = !ctrlActive;
+            ctrlActive = true;
 		}
         else if (gesture_id == 1 || gesture_id == 2 || gesture_id == 3)
         {
             // "swipe left"-gesture: rotate left
             HUDText.text = "Identified Vaccuum Spell";
-			currentSpell = SPELLS.VACUUM;
+            currentSpell = SPELLS.VACUUM;
             vacuumActive = !vacuumActive;
-
 		}
         else if (gesture_id == 4)
         {
             HUDText.text = "Identified Slow Down Spell";
             currentSpell = SPELLS.SLOWDOWN;
-            slowActive = !slowActive; 
-
-
+            //slowActive = !slowActive; 
+            slowActive = true;
 		}
         else
         {
@@ -465,14 +477,26 @@ public class SpellCasting : MonoBehaviour
         if (ctrlActive)
         {
 			// check if item was selected 
-			if (selectedObject != null && selectedObject.CompareTag("KnockOver"))
+			if (selectedObject != null && (selectedObject.CompareTag("KnockOver") || selectedObject.CompareTag("ToxicBottle")))
 			{
+				/*
 				// get active controller item 
 				// obj position = the test position 
 				//selectedObject.transform.position = active_controller_move.transform.position;
 				selectedObject.transform.position = Vector3.Lerp(selectedObject.transform.position, active_controller_move.transform.position, Time.deltaTime);
                 selectedObject.GetComponent<Rigidbody>().isKinematic = false;
                 selectedObject.GetComponent<Rigidbody>().useGravity = false; 
+                */
+
+                selectedObject.GetComponent<Rigidbody>().useGravity = false;    
+				selectedObject.position = active_controller_move.transform.position;
+                selectedObject.rotation = active_controller_move.transform.rotation;
+                
+                if (trackingPos.Count > 15)
+                {
+                    trackingPos.RemoveAt(0);
+                }
+                trackingPos.Add(transform.position);
 
 				Debug.Log("Moving");
 			}
@@ -485,10 +509,21 @@ public class SpellCasting : MonoBehaviour
         else
         {
             // drop object - do I need to explicitly do this 
-            if (selectedObject != null)
+            if (itemDropped)
             {
-				//selectedObject.GetComponent<Rigidbody>().isKinematic = true;
-				selectedObject.GetComponent<Rigidbody>().useGravity = true;
+				//selectedObject.GetComponent<Rigidbody>().useGravity = true;
+
+                if (trackingPos.Count > 0)
+                {
+					Vector3 dir = trackingPos[trackingPos.Count - 1] - trackingPos[0];
+					selectedObject.GetComponent<Rigidbody>().AddForce(dir * velocity);
+					selectedObject.GetComponent<Rigidbody>().useGravity = true;
+					selectedObject.GetComponent<Rigidbody>().isKinematic = false;
+                    trackingPos.Clear();
+
+					itemDropped = false;
+				}
+               
 			}
 		}
 		
@@ -523,7 +558,8 @@ public class SpellCasting : MonoBehaviour
                 // lower time 
                 CauldronController cauldron = selectedObject.GetComponent<CauldronController>();
                 cauldron.timeToExplode -= 500;
-				slowActive = false; 
+				slowActive = false;
+                currentSpell = SPELLS.NONE;
 			}
 
             else if (selectedObject != null && selectedObject.CompareTag("Cat"))
@@ -532,7 +568,8 @@ public class SpellCasting : MonoBehaviour
                 CatBehavior cat = selectedObject.GetComponent<CatBehavior>();
                 cat.slowDown = true; 
                 slowActive = false; 
-            }
+                currentSpell = SPELLS.NONE;
+			}
 		}
 	}
     
@@ -549,7 +586,7 @@ public class SpellCasting : MonoBehaviour
 			bool leftHit = Physics.Raycast(leftRay, out hitInfo);
 			if (leftHit)
 			{
-                if (hitInfo.transform.CompareTag("KnockOver") || hitInfo.transform.CompareTag("Cauldron") || hitInfo.transform.CompareTag("Cat"))
+                if (hitInfo.transform.CompareTag("KnockOver") || hitInfo.transform.CompareTag("ToxicBottle") || hitInfo.transform.CompareTag("Cauldron") || hitInfo.transform.CompareTag("Cat"))
                 {
 					// select object 
 					selectedObject = hitInfo.transform;
@@ -564,7 +601,7 @@ public class SpellCasting : MonoBehaviour
 			bool rightHit = !leftHit && Physics.Raycast(rightRay, out hitInfo);
 			if (rightHit)
 			{
-				if (hitInfo.transform.CompareTag("KnockOver") || hitInfo.transform.CompareTag("Cauldron") || hitInfo.transform.CompareTag("Cat"))
+				if (hitInfo.transform.CompareTag("KnockOver") || hitInfo.transform.CompareTag("ToxicBottle") || hitInfo.transform.CompareTag("Cauldron") || hitInfo.transform.CompareTag("Cat"))
 				{
 					// select object 
 					selectedObject = hitInfo.transform;

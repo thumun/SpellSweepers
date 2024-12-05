@@ -37,11 +37,15 @@ public class ConeLogic : MonoBehaviour
         {
             // attach to cone 
             Debug.Log("knock over object attached to vacuum");
-            OVRRig.GetComponent<SpellCasting>().vacuumObjects.Add(other.transform);
-            other.transform.SetParent(this.transform);
-			other.transform.GetComponent<Rigidbody>().isKinematic = false;
-			other.transform.GetComponent<Rigidbody>().useGravity = false;
-            other.gameObject.tag = "Untagged";
+            if (!OVRRig.GetComponent<SpellCasting>().vacuumObjects.Contains(other.transform))
+            {
+				OVRRig.GetComponent<SpellCasting>().vacuumObjects.Add(other.transform);
+				other.transform.SetParent(this.transform);
+				other.transform.GetComponent<Rigidbody>().isKinematic = false;
+				other.transform.GetComponent<Rigidbody>().useGravity = false;
+				other.gameObject.tag = "Untagged";
+			}
+			
 		}
 	}
 }

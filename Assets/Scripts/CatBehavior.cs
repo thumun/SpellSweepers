@@ -128,7 +128,7 @@ public class CatBehavior : MonoBehaviour
 				continue;
 			}
 
-			if (colliders[rndIndx].transform.CompareTag("KnockOver") && (prevObj == null || colliders[rndIndx].transform.name != prevObj.transform.name))
+			if ((colliders[rndIndx].transform.CompareTag("KnockOver") || colliders[rndIndx].transform.CompareTag("ToxicBottle")) && (prevObj == null || colliders[rndIndx].transform.name != prevObj.transform.name))
 			{
 				agent.SetDestination(colliders[rndIndx].transform.position);
 				// hopefully collider will just knock over? 
