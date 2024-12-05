@@ -75,6 +75,8 @@ public class SpellCasting : MonoBehaviour
     // for vacuum spell 
     private bool vacuumActive = false; 
 
+    public List<Transform> vacuumObjects = new List<Transform>();
+
     [SerializeField]
     private GameObject active_controller_move = null;
 
@@ -85,6 +87,8 @@ public class SpellCasting : MonoBehaviour
     public GameObject LeftHandRef = null;
 	public GameObject LeftPtrRef = null;
 	public GameObject LeftMoveRef = null;
+
+    public GameObject coneRT = null;
 
     internal enum SPELLS { NONE, CONTROL, SLOWDOWN, VACUUM }
     internal SPELLS currentSpell = SPELLS.NONE;
@@ -300,22 +304,32 @@ public class SpellCasting : MonoBehaviour
         // if button pressed -> select object (if object exists with knock over tag) 
         if ((button_a_left || button_a_right) && currentSpell != SPELLS.NONE)
         {
-            if (selectedObject != null && currentSpell == SPELLS.CONTROL)
+			if (currentSpell != SPELLS.VACUUM)
             {
-                ctrlActive = false; 
+				if (selectedObject != null && currentSpell == SPELLS.CONTROL)
+				{
+					ctrlActive = false;
 
+				}
+
+				bool debugHit = CheckHitObject();
+				if (debugHit)
+				{
+					Debug.Log($"item selected: {selectedObject.name}");
+				}
+				else
+				{
+					Debug.Log("nothing selected");
+				}
 			}
 
-
-            bool debugHit = CheckHitObject();
-            if (debugHit)
-            {
-                Debug.Log($"item selected: {selectedObject.name}");
-            }
             else
             {
-				Debug.Log("nothing selected");
+                // vacuum drop all items 
+                UnVacuum();
+				vacuumActive = false;   
 			}
+			
         }
 
         if (currentSpell == SPELLS.CONTROL && selectedObject != null)
@@ -328,6 +342,8 @@ public class SpellCasting : MonoBehaviour
         {
             SlowDown();
 		}
+
+        VacuumSpell();
 
 		GameObject hmd = Camera.main.gameObject; // alternative: GameObject.Find("Main Camera");
         Vector3 hmd_p = hmd.transform.position;
@@ -477,20 +493,21 @@ public class SpellCasting : MonoBehaviour
     void VacuumSpell()
     {
         // check if spell is active 
+        coneRT.SetActive(vacuumActive);
 
-        if (vacuumActive)
-        {
-			// set cone active 
-
-
-			// check intersection with cone in front of wand
-			// if dust bunny -> make dust bunny disappear and append to dust bunny counter 
-			// else attach to cone 
-
-			// if not active 
-			// get rid of cone
-		}
 	}
+
+    void UnVacuum()
+    {
+        foreach (var item in vacuumObjects)
+        {
+            GameObject lvl = GameObject.Find("Level");
+			item.transform.SetParent(lvl.transform);
+			//item.transform.GetComponent<Rigidbody>().isKinematic = true;
+			item.transform.GetComponent<Rigidbody>().useGravity = true;
+			item.gameObject.tag = "KnockOver";
+		}
+    }
 
     void SlowDown()
 	{
