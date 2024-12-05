@@ -28,10 +28,7 @@ public class ConeLogic : MonoBehaviour
             other.gameObject.SetActive(false);
             // Add to dust bunny counter?
 			Debug.Log("dust bunny captured");
-            string count = bunnyCounter.GetComponent<TextMeshPro>().text;
-            int countNum = int.Parse(count);
-            countNum += 1; 
-			bunnyCounter.GetComponent<TextMeshPro>().text = countNum.ToString();
+            GameManager.instance.CaptureDustBunny();
 		}
         else if (other.CompareTag("KnockOver"))
         {

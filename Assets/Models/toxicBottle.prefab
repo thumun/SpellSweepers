@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1361314203661278345}
   - component: {fileID: 9157998691252905981}
   - component: {fileID: 4044009447841942289}
+  - component: {fileID: 4339922909524495860}
   m_Layer: 0
   m_Name: toxicBottle
   m_TagString: ToxicBottle
@@ -85,6 +86,26 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &4339922909524495860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 384665168812502945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a9e5170520095840bfcf965e93a0958, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: ToxicBottle
+  underwaterDrag: 3
+  underwaterAngularDrag: 1
+  airDrag: 0
+  airAngularDrag: 0.05
+  floatingPower: 100
+  inCauldron: 0
+  underwater: 0
 --- !u!1 &4094785831146517918
 GameObject:
   m_ObjectHideFlags: 0

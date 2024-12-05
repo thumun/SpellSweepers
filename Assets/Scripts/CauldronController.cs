@@ -22,6 +22,8 @@ public class CauldronController : MonoBehaviour
     public GameObject cauldronFractured;
 
     public GameObject liquidSurface;
+    private Renderer liquidSurfaceRenderer;
+
     public List<GameObject> floatingObjects;
     private List<string> requiredRecipe = new List<string>();
     private List<string> currentFloaters = new List<string>();
@@ -30,6 +32,19 @@ public class CauldronController : MonoBehaviour
     public GameObject[] liquidDropSpawnLocs;
 
     private float liquidSurfaceHeight;
+    private Color liquidColor;
+    private Color foamColor;
+
+    public Color solvedLiquidColor;
+    public Color solvedFoamColor;
+    public Color explodingLiquidColor;
+    public Color explodingFoamColor;
+
+    private Color solvedLastLiquidColor;
+    private Color solvedLastFoamColor;
+    private bool solvedColorFinished = false;
+    private float solvedColorTimer = 0.0f;
+    private float solvedColorTimerMax = 5.0f;
 
     public int timeToExplode;
     private int explosionTime = 20000;
@@ -51,16 +66,36 @@ public class CauldronController : MonoBehaviour
         cauldronFractured.SetActive(false);
         liquidSurface.SetActive(true);
 
+        liquidSurfaceRenderer = liquidSurface.GetComponent<Renderer>();
+
         liquidSurfaceHeight = liquidSurface.transform.position.y;
 
         requiredRecipe.Add("IngRed");
         requiredRecipe.Add("IngBlue");
+
+        liquidColor = new Color(0.0f, 0.0f, 0.0f);
+        foamColor = new Color(0.0f, 0.0f, 0.0f);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (exploded || solved) return;
+        if (exploded) return;
+
+        if (solved) {
+            if (solvedColorFinished) return;
+
+            solvedColorTimer += Time.deltaTime;
+            solvedColorTimer = Mathf.Min(solvedColorTimer, solvedColorTimerMax);
+            if (solvedColorTimer >= solvedColorTimerMax) solvedColorFinished = true;
+
+            liquidColor = solvedLastLiquidColor / (float)solvedColorTimerMax * (float)(solvedColorTimerMax - solvedColorTimer) + solvedLiquidColor / (float)solvedColorTimerMax * (float)solvedColorTimer;
+            liquidColor = solvedLastFoamColor / (float)solvedColorTimerMax * (float)(solvedColorTimerMax - solvedColorTimer) + solvedFoamColor / (float)solvedColorTimerMax * (float)solvedColorTimer;
+
+            liquidSurfaceRenderer.material.SetColor("_BaseColor", liquidColor);
+            liquidSurfaceRenderer.material.SetColor("_FoamColor", foamColor);
+            return;
+        }
 
         IncrementTimeToExplode(1);
         if (timeToExplode >= explosionTime) {
@@ -70,6 +105,9 @@ public class CauldronController : MonoBehaviour
         if (shouldExplode && !exploded) {
             Explode();
         }
+
+        liquidSurfaceRenderer.material.SetColor("_BaseColor", liquidColor);
+        liquidSurfaceRenderer.material.SetColor("_FoamColor", foamColor);
     }
 
     public float GetSurfaceHeight() {
@@ -78,6 +116,11 @@ public class CauldronController : MonoBehaviour
 
     public void AddNewIngredient(string ingredient) {
         if (exploded || solved) return;
+
+        if (ingredient == "ToxicBottle") {
+            Explode();
+            return;
+        }
         
         currentFloaters.Add(ingredient);
         if (!requiredRecipe.Contains(ingredient)) {
@@ -93,6 +136,9 @@ public class CauldronController : MonoBehaviour
             }
             if (allContains) {
                 solved = true;
+                solvedLastLiquidColor = liquidColor;
+                solvedLastFoamColor = foamColor;
+                GameManager.instance.CauldronStatusUpdate(true);
             }
         }
     }
@@ -100,6 +146,9 @@ public class CauldronController : MonoBehaviour
     public void IncrementTimeToExplode(int t) {
         timeToExplode = Mathf.Min(explosionTime, timeToExplode + t);
         liquidSurface.transform.localScale += new Vector3(0, 0, 1) * scaleDiff / (float)explosionTime;
+
+        liquidColor = explodingLiquidColor / (float)explosionTime * (float)timeToExplode;
+        foamColor = explodingFoamColor / (float)explosionTime * (float)timeToExplode;
     }
 
     void Explode()
@@ -124,5 +173,6 @@ public class CauldronController : MonoBehaviour
         }
 
         exploded = true;
+        GameManager.instance.CauldronStatusUpdate(false);
     }
 }
