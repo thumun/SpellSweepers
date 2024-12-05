@@ -511,7 +511,6 @@ public class SpellCasting : MonoBehaviour
 				Debug.Log("Need to select an item");
 			}
 		}
-
         else
         {
             // drop object - do I need to explicitly do this 
@@ -567,7 +566,6 @@ public class SpellCasting : MonoBehaviour
 				slowActive = false;
                 currentSpell = SPELLS.NONE;
 			}
-
             else if (selectedObject != null && selectedObject.CompareTag("Cat"))
             {
                 // activate flee condition 

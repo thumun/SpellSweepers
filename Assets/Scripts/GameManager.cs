@@ -18,6 +18,9 @@ public class GameManager : MonoBehaviour
 
     private static GameManager m_instance;
 
+    public bool isGameOver = false;
+    public bool isLevelClear = false;
+
     // Dust bunny related
     public GameObject[] dustBunnies;
     private int dustBunnyCounter = 0;
@@ -32,8 +35,9 @@ public class GameManager : MonoBehaviour
 
     // Progress related
     private int currentProgressPoints = 0;
-    private int maxProgressPoints = 100;
+    private int maxProgressPoints = 60;
     private int levelOfChaos = 0;
+    private bool cauldronFailed = false;
 
     // For UI
     private string dustBunniesLengthString;
@@ -87,10 +91,11 @@ public class GameManager : MonoBehaviour
 
     public void CauldronStatusUpdate(bool solved) {
         if (solved) {
-            currentProgressPoints += 30;
+            IncrementProgressPoints(30);
             UIManager.instance.UpdateProgressPoints(currentProgressPoints);
         } else {
-            levelOfChaos += 10;
+            IncrementLevelOfChaos(10);
+            cauldronFailed = true;
         }
     }
 
@@ -98,8 +103,34 @@ public class GameManager : MonoBehaviour
         if (dustBunnyCounter >= dustBunnies.Length) return;
 
         dustBunnyCounter += 1;
-        currentProgressPoints += 10;
+        IncrementProgressPoints(10);
         UIManager.instance.UpdateDustBunnyCounter(dustBunnyCounter);
         UIManager.instance.UpdateProgressPoints(currentProgressPoints);
+    }
+
+    private void IncrementProgressPoints(int pts) {
+        currentProgressPoints += pts;
+        // TODO : Also check for major puzzles / tasks / other failure conditions
+        if (currentProgressPoints > 0.8 * maxProgressPoints && !cauldronFailed) {
+            LevelClear();
+        }
+    }
+
+    private void IncrementLevelOfChaos(int pts) {
+        levelOfChaos += pts;
+        // TODO : balance this arbitrary condition
+        if (levelOfChaos >= 0.3f * maxProgressPoints) {
+            GameOver();
+        }
+    }
+
+    public void GameOver() {
+        isGameOver = true;
+        Debug.Log("Game over");
+    }
+
+    public void LevelClear() {
+        isLevelClear = true;
+        Debug.Log("Level clear");
     }
 }

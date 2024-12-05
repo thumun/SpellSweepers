@@ -59,6 +59,13 @@ public class CauldronController : MonoBehaviour
     public float explosionRadius;
     public float upwardsModifier;
 
+    private AudioClipPlayer audioPlayerBoiling;
+    public AudioClipPlayer audioPlayerExplosion;
+    private float minVolume = 0.1f;
+    private float maxVolume = 1.0f;
+    private float solvedLastVolume;
+    private float currentVolume;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -75,6 +82,9 @@ public class CauldronController : MonoBehaviour
 
         liquidColor = new Color(0.0f, 0.0f, 0.0f);
         foamColor = new Color(0.0f, 0.0f, 0.0f);
+
+        audioPlayerBoiling = GetComponent<AudioClipPlayer>();
+        currentVolume = minVolume;
     }
 
     // Update is called once per frame
@@ -94,6 +104,9 @@ public class CauldronController : MonoBehaviour
 
             liquidSurfaceRenderer.material.SetColor("_BaseColor", liquidColor);
             liquidSurfaceRenderer.material.SetColor("_FoamColor", foamColor);
+
+            currentVolume = solvedLastVolume / (float)solvedColorTimerMax * (float)(solvedColorTimerMax - solvedColorTimer) + minVolume / (float)solvedColorTimerMax * (float)solvedColorTimer;
+            audioPlayerBoiling.ChangeVolume(currentVolume);
             return;
         }
 
@@ -108,6 +121,8 @@ public class CauldronController : MonoBehaviour
 
         liquidSurfaceRenderer.material.SetColor("_BaseColor", liquidColor);
         liquidSurfaceRenderer.material.SetColor("_FoamColor", foamColor);
+
+        audioPlayerBoiling.ChangeVolume(currentVolume);
     }
 
     public float GetSurfaceHeight() {
@@ -149,6 +164,8 @@ public class CauldronController : MonoBehaviour
 
         liquidColor = explodingLiquidColor / (float)explosionTime * (float)timeToExplode;
         foamColor = explodingFoamColor / (float)explosionTime * (float)timeToExplode;
+
+        currentVolume = maxVolume / (float)explosionTime * (float)timeToExplode;
     }
 
     void Explode()
@@ -171,6 +188,9 @@ public class CauldronController : MonoBehaviour
         foreach(GameObject obj in floatingObjects) {
             obj.GetComponent<IngredientController>().CauldronExploded();
         }
+
+        audioPlayerBoiling.StopClip();
+        audioPlayerExplosion.PlayClip();
 
         exploded = true;
         GameManager.instance.CauldronStatusUpdate(false);
