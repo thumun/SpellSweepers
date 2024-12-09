@@ -309,16 +309,23 @@ public class SpellCasting : MonoBehaviour
         // if button pressed -> select object (if object exists with knock over tag) 
         if ((button_a_left || button_a_right) && currentSpell != SPELLS.NONE)
         {
-			if (currentSpell != SPELLS.VACUUM)
+			
+			if (selectedObject != null && currentSpell == SPELLS.CONTROL)
+			{
+				ctrlActive = false;
+                currentSpell = SPELLS.NONE;
+                itemDropped = true;
+
+			} 
+            else if (currentSpell == SPELLS.VACUUM)
             {
-				if (selectedObject != null && currentSpell == SPELLS.CONTROL)
-				{
-					ctrlActive = false;
-                    currentSpell = SPELLS.NONE;
-                    itemDropped = true;
-
-				}
-
+				// vacuum drop all items 
+				UnVacuum();
+				vacuumActive = false;
+				currentSpell = SPELLS.NONE;
+			}
+            else
+            {
 				bool debugHit = CheckHitObject();
 				if (debugHit)
 				{
@@ -327,20 +334,12 @@ public class SpellCasting : MonoBehaviour
 				else
 				{
 					Debug.Log("nothing selected");
-                    // deactivate spell 
-                    ctrlActive = false;
-                    vacuumActive = false;
-                    slowActive = false;
+					// deactivate spell 
+					ctrlActive = false;
+					vacuumActive = false;
+					slowActive = false;
 					currentSpell = SPELLS.NONE;
 				}
-			}
-
-            else
-            {
-                // vacuum drop all items 
-                UnVacuum();
-				vacuumActive = false;   
-                currentSpell = SPELLS.NONE;
 			}
 			
         }
@@ -349,11 +348,16 @@ public class SpellCasting : MonoBehaviour
         {
 			ControlSpell();
 		}
-        // add for other spells!! 
 
         else if (currentSpell == SPELLS.SLOWDOWN && selectedObject != null)
         {
             SlowDown();
+		}
+
+        else if (currentSpell == SPELLS.NONE && selectedObject != null && itemDropped)
+        {
+            ItemThrow();
+
 		}
 
         VacuumSpell();
@@ -457,7 +461,8 @@ public class SpellCasting : MonoBehaviour
             HUDText.text = "Identified Vaccuum Spell";
             if (GameManager.instance.TryCastSpell(1)) {
                 currentSpell = SPELLS.VACUUM;
-                vacuumActive = !vacuumActive;
+                //vacuumActive = !vacuumActive;
+                vacuumActive = true;
             }
 		}
         else if (gesture_id == 4)
@@ -514,25 +519,48 @@ public class SpellCasting : MonoBehaviour
         else
         {
             // drop object - do I need to explicitly do this 
-            if (itemDropped)
-            {
-				//selectedObject.GetComponent<Rigidbody>().useGravity = true;
+   //         if (itemDropped)
+   //         {
+			//	//selectedObject.GetComponent<Rigidbody>().useGravity = true;
 
-                if (trackingPos.Count > 0)
-                {
-					Vector3 dir = trackingPos[trackingPos.Count - 1] - trackingPos[0];
-					selectedObject.GetComponent<Rigidbody>().AddForce(dir * velocity);
-					selectedObject.GetComponent<Rigidbody>().useGravity = true;
-					selectedObject.GetComponent<Rigidbody>().isKinematic = false;
-                    trackingPos.Clear();
+   //             if (trackingPos.Count > 0)
+   //             {
+			//		Vector3 dir = trackingPos[trackingPos.Count - 1] - trackingPos[0];
+			//		selectedObject.GetComponent<Rigidbody>().AddForce(dir * velocity);
+			//		selectedObject.GetComponent<Rigidbody>().useGravity = true;
+			//		selectedObject.GetComponent<Rigidbody>().isKinematic = false;
+   //                 trackingPos.Clear();
 
-					itemDropped = false;
-				}
+			//		itemDropped = false;
+			//	}
                
-			}
+			//}
 		}
 		
     }
+
+    void ItemThrow()
+    {
+		if (itemDropped)
+		{
+			//selectedObject.GetComponent<Rigidbody>().useGravity = true;
+
+			if (trackingPos.Count > 0)
+			{
+				Vector3 dir = trackingPos[trackingPos.Count - 1] - trackingPos[0];
+				selectedObject.GetComponent<Rigidbody>().AddForce(dir * velocity);
+				selectedObject.GetComponent<Rigidbody>().useGravity = true;
+				selectedObject.GetComponent<Rigidbody>().isKinematic = false;
+				trackingPos.Clear();
+
+                selectedObject = null;
+
+				itemDropped = false;
+			}
+
+		}
+	}
+
     void VacuumSpell()
     {
         // check if spell is active 
