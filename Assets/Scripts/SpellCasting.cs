@@ -552,6 +552,15 @@ public class SpellCasting : MonoBehaviour
     {
         // check if spell is active 
         coneRT.SetActive(vacuumActive);
+
+        if (vacuumActive && vacuumObjects.Count > 0)
+        {
+            foreach (Transform item in vacuumObjects)
+            {
+                item.position = coneRT.transform.position;
+				item.rotation = coneRT.transform.rotation;
+			}
+        }
 	}
 
     void UnVacuum()
