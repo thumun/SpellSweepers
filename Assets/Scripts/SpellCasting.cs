@@ -66,7 +66,10 @@ public class SpellCasting : MonoBehaviour
 	[SerializeField]
 	private Transform rightLaser;
 
-    public Transform selectedObject; 
+    public Transform selectedObject;
+    private Color originalObjColor;
+    private Color selectedColor = new Color(255.0f/255.0f, 234.0f/255.0f, 0);
+    private float selectTimer = 1.0f;
 
     // for control spell
     private bool ctrlActive = false;
@@ -157,7 +160,6 @@ public class SpellCasting : MonoBehaviour
         {
             Debug.Log("Error with type of headset");
         }
-
     }
 
     // Helper function to handle new VR controllers being detected.
@@ -306,41 +308,47 @@ public class SpellCasting : MonoBehaviour
 		bool button_a_left = OVRInput.Get(OVRInput.Button.One);
         bool button_a_right = OVRInput.Get(OVRInput.Button.Two);
 
-        // if button pressed -> select object (if object exists with knock over tag) 
-        if ((button_a_left || button_a_right) && currentSpell != SPELLS.NONE)
+		// if button pressed -> select object (if object exists with knock over tag) 
+		if ((button_a_left || button_a_right) && currentSpell != SPELLS.NONE)
         {
-			
-			if (selectedObject != null && currentSpell == SPELLS.CONTROL)
-			{
-				ctrlActive = false;
-                currentSpell = SPELLS.NONE;
-                itemDropped = true;
+            if (selectTimer >= 0.1f)
+            {
+                if (selectedObject != null && currentSpell == SPELLS.CONTROL)
+                {
+                    ctrlActive = false;
+                    currentSpell = SPELLS.NONE;
+                    itemDropped = true;
+                }
 
-			} 
-            else if (currentSpell == SPELLS.VACUUM)
-            {
-				// vacuum drop all items 
-				UnVacuum();
-				vacuumActive = false;
-				currentSpell = SPELLS.NONE;
+                else if (currentSpell == SPELLS.VACUUM)
+                {
+                    // vacuum drop all items 
+                    UnVacuum();
+                    vacuumActive = false;
+                    currentSpell = SPELLS.NONE;
+                }
+                else
+                {
+                    bool debugHit = CheckHitObject();
+                    if (debugHit)
+                    {
+                        Debug.Log($"item selected: {selectedObject.name}");
+                    }
+                    else
+                    {
+                        Debug.Log("nothing selected");
+                        // deactivate spell 
+                        ctrlActive = false;
+                        vacuumActive = false;
+                        slowActive = false;
+                        currentSpell = SPELLS.NONE;
+                    }
+                }
+
+				selectTimer = 0.0f;
 			}
-            else
-            {
-				bool debugHit = CheckHitObject();
-				if (debugHit)
-				{
-					Debug.Log($"item selected: {selectedObject.name}");
-				}
-				else
-				{
-					Debug.Log("nothing selected");
-					// deactivate spell 
-					ctrlActive = false;
-					vacuumActive = false;
-					slowActive = false;
-					currentSpell = SPELLS.NONE;
-				}
-			}
+
+			selectTimer += Time.deltaTime;
 			
         }
 
@@ -516,27 +524,6 @@ public class SpellCasting : MonoBehaviour
 				Debug.Log("Need to select an item");
 			}
 		}
-        else
-        {
-            // drop object - do I need to explicitly do this 
-   //         if (itemDropped)
-   //         {
-			//	//selectedObject.GetComponent<Rigidbody>().useGravity = true;
-
-   //             if (trackingPos.Count > 0)
-   //             {
-			//		Vector3 dir = trackingPos[trackingPos.Count - 1] - trackingPos[0];
-			//		selectedObject.GetComponent<Rigidbody>().AddForce(dir * velocity);
-			//		selectedObject.GetComponent<Rigidbody>().useGravity = true;
-			//		selectedObject.GetComponent<Rigidbody>().isKinematic = false;
-   //                 trackingPos.Clear();
-
-			//		itemDropped = false;
-			//	}
-               
-			//}
-		}
-		
     }
 
     void ItemThrow()
@@ -553,11 +540,11 @@ public class SpellCasting : MonoBehaviour
 				selectedObject.GetComponent<Rigidbody>().isKinematic = false;
 				trackingPos.Clear();
 
-                selectedObject = null;
+				selectedObject.gameObject.GetComponent<Renderer>().material.color = originalObjColor;
+				selectedObject = null;
 
 				itemDropped = false;
 			}
-
 		}
 	}
 
@@ -565,7 +552,6 @@ public class SpellCasting : MonoBehaviour
     {
         // check if spell is active 
         coneRT.SetActive(vacuumActive);
-
 	}
 
     void UnVacuum()
@@ -583,7 +569,6 @@ public class SpellCasting : MonoBehaviour
     void SlowDown()
 	{
 		// one time use spell 
-
         if (slowActive)
         {
 			if (selectedObject != null && selectedObject.CompareTag("Cauldron"))
@@ -592,6 +577,8 @@ public class SpellCasting : MonoBehaviour
                 CauldronController cauldron = selectedObject.GetComponent<CauldronController>();
                 cauldron.timeToExplode -= 500;
 				slowActive = false;
+				selectedObject.gameObject.GetComponent<Renderer>().material.color = originalObjColor;
+				selectedObject = null;
                 currentSpell = SPELLS.NONE;
 			}
             else if (selectedObject != null && selectedObject.CompareTag("Cat"))
@@ -599,7 +586,9 @@ public class SpellCasting : MonoBehaviour
                 // activate flee condition 
                 CatBehavior cat = selectedObject.GetComponent<CatBehavior>();
                 cat.slowDown = true; 
-                slowActive = false; 
+                slowActive = false;
+				selectedObject.gameObject.GetComponent<Renderer>().material.color = originalObjColor;
+				selectedObject = null;
                 currentSpell = SPELLS.NONE;
 			}
 		}
@@ -609,7 +598,6 @@ public class SpellCasting : MonoBehaviour
     // this will select an object 
 	private bool CheckHitObject()
 	{
-
 		if (leftLaser || rightLaser)
 		{
 		    RaycastHit hitInfo = new RaycastHit();
@@ -622,13 +610,14 @@ public class SpellCasting : MonoBehaviour
                 {
 					// select object 
 					selectedObject = hitInfo.transform;
+                    originalObjColor = selectedObject.gameObject.GetComponent<Renderer>().material.color;
+					selectedObject.gameObject.GetComponent<Renderer>().material.color = selectedColor;
+                    
 					return true;
 				}
-
 				//return hitInfo.transform;
 			}
             
-
 			Ray rightRay = new Ray(rightLaser.position, rightLaser.forward);
 			bool rightHit = !leftHit && Physics.Raycast(rightRay, out hitInfo);
 			if (rightHit)
@@ -637,13 +626,14 @@ public class SpellCasting : MonoBehaviour
 				{
 					// select object 
 					selectedObject = hitInfo.transform;
+					originalObjColor = selectedObject.gameObject.GetComponent<Renderer>().material.color;
+					selectedObject.gameObject.GetComponent<Renderer>().material.color = selectedColor;
+
 					return true; 
 				}
-
 				//return hitInfo.transform;
 			}
 		}
 		return false;
 	}
-
 }
