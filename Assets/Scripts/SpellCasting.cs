@@ -100,7 +100,12 @@ public class SpellCasting : MonoBehaviour
 	public GameObject LeftMoveRef = null;
 
     public GameObject coneRT = null;
-    public GameObject coneLT = null; 
+    public GameObject coneLT = null;
+
+    private float textTimer = 0.0f;
+
+    [SerializeField]
+    private GameObject centerEye = null; 
 
     internal enum SPELLS { NONE, CONTROL, SLOWDOWN, VACUUM }
     internal SPELLS currentSpell = SPELLS.NONE;
@@ -379,6 +384,18 @@ public class SpellCasting : MonoBehaviour
 
         VacuumSpell();
 
+        
+        if (textTimer > 0.0f)
+        {
+            textTimer -= Time.deltaTime;
+        }
+        else if (textTimer <= 0.0f)
+        {
+            textTimer = 0.0f;
+            HUDText.gameObject.SetActive(false);
+        }
+        
+
 		GameObject hmd = Camera.main.gameObject; // alternative: GameObject.Find("Main Camera");
         Vector3 hmd_p = hmd.transform.position;
         Quaternion hmd_q = hmd.transform.rotation;
@@ -467,7 +484,8 @@ public class SpellCasting : MonoBehaviour
         else if (gesture_id == 0)
         {
             // "loop"-gesture: create cylinder
-            HUDText.text = "Identified Control Spell";
+            SpellcastTxt("Identified Control Spell");
+            //HUDText.text = "Identified Control Spell";
             if (GameManager.instance.TryCastSpell(0)) {
                 currentSpell = SPELLS.CONTROL;
                 //ctrlActive = !ctrlActive;
@@ -477,7 +495,8 @@ public class SpellCasting : MonoBehaviour
         else if (gesture_id == 1 || gesture_id == 2)
         {
             // "swipe left"-gesture: rotate left
-            HUDText.text = "Identified Vaccuum Spell";
+            SpellcastTxt("Identified Vaccuum Spell");
+            //HUDText.text = "Identified Vaccuum Spell";
             if (GameManager.instance.TryCastSpell(1)) {
                 currentSpell = SPELLS.VACUUM;
                 //vacuumActive = !vacuumActive;
@@ -486,7 +505,9 @@ public class SpellCasting : MonoBehaviour
 		}
         else if (gesture_id == 4)
         {
-            HUDText.text = "Identified Slow Down Spell";
+            SpellcastTxt("Identified Slow Down Spell");
+
+			//HUDText.text = "Identified Slow Down Spell";
             if (GameManager.instance.TryCastSpell(2)) {
                 currentSpell = SPELLS.SLOWDOWN;
                 //slowActive = !slowActive; 
@@ -496,7 +517,8 @@ public class SpellCasting : MonoBehaviour
         else
         {
             // Other ID: one of the user-registered gestures:
-            HUDText.text = "Unknown Gesture: " + (gesture_id);
+            //HUDText.text = "Unknown Gesture: " + (gesture_id);
+            SpellcastTxt("Unknown Spell");
         }
     }
 
@@ -680,5 +702,14 @@ public class SpellCasting : MonoBehaviour
 			}
 		}
 		return false;
+	}
+
+    void SpellcastTxt(string changetxt)
+    {
+		//HUDText.transform.position = this.transform.forward + this.transform.position;
+		HUDText.transform.position = centerEye.transform.forward + centerEye.transform.position;
+		HUDText.text = changetxt;
+        HUDText.gameObject.SetActive(true);
+        textTimer = 1.0f;
 	}
 }

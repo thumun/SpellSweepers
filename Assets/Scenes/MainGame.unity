@@ -1723,6 +1723,7 @@ MonoBehaviour:
   LeftMoveRef: {fileID: 960341741}
   coneRT: {fileID: 919132147487674959}
   coneLT: {fileID: 738252175}
+  centerEye: {fileID: 1189732062}
   HUDText: {fileID: 953829573}
   active_controller: {fileID: 0}
   active_controller_pointer: {fileID: 0}
@@ -1842,12 +1843,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 953829571}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: -0.968}
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0.44}
   m_LocalScale: {x: 0.2487, y: 0.2487, z: 0.2487}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 995272247}
+  m_Father: {fileID: 7408625422701024329}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2050,7 +2051,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1715362375}
-  - {fileID: 953829572}
   - {fileID: 1930366729}
   - {fileID: 7456396179218720350}
   - {fileID: 9051973794933067176}
@@ -7054,6 +7054,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2019757592}
+  - {fileID: 953829572}
   - {fileID: 995272247}
   - {fileID: 2145142267}
   - {fileID: 5149890068436729671}
