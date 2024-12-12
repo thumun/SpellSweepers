@@ -89,6 +89,7 @@ public class SpellCasting : MonoBehaviour
 
     [SerializeField]
     private GameObject active_controller_move = null;
+    private GameObject active_controller_cone = null; 
 
     public GameObject RightHandRef = null;
     public GameObject RightPtrRef = null;
@@ -389,11 +390,13 @@ public class SpellCasting : MonoBehaviour
                 active_controller = RightHandRef;
                 active_controller_pointer = RightPtrRef;
                 active_controller_move = RightMoveRef;
+                active_controller_cone = coneRT;
 
 			} else if (trigger_left > 0.0f) {
 				active_controller = LeftHandRef;
 				active_controller_pointer = LeftPtrRef;
 				active_controller_move = LeftMoveRef;
+                active_controller_cone = coneLT;
 
 			} else {
                 // If we arrive here, the user is pressing neither controller's trigger:
@@ -566,17 +569,22 @@ public class SpellCasting : MonoBehaviour
 
     void VacuumSpell()
     {
-        // check if spell is active 
-        coneRT.SetActive(vacuumActive);
-
-        if (vacuumActive && vacuumObjects.Count > 0)
+        if (vacuumActive)
         {
-            foreach (Transform item in vacuumObjects)
-            {
-                item.position = coneRT.transform.position;
-				item.rotation = coneRT.transform.rotation;
+			// check if spell is active 
+			active_controller_cone.SetActive(true);
+			//coneRT.SetActive(vacuumActive);
+
+			if (vacuumObjects.Count > 0)
+			{
+				foreach (Transform item in vacuumObjects)
+				{
+					item.position = coneRT.transform.position;
+					item.rotation = coneRT.transform.rotation;
+				}
 			}
-        }
+		}
+        
 	}
 
     void UnVacuum()
@@ -586,10 +594,12 @@ public class SpellCasting : MonoBehaviour
             GameObject lvl = GameObject.Find("Level");
 			item.transform.SetParent(lvl.transform);
 			//item.transform.GetComponent<Rigidbody>().isKinematic = true;
-			item.GetComponent<Rigidbody>().AddForce(new Vector3(0, 0, 0) * velocity);
+			//item.GetComponent<Rigidbody>().AddForce(new Vector3(0, 0, 0) /** velocity*/);
 			item.transform.GetComponent<Rigidbody>().useGravity = true;
 			item.gameObject.tag = "KnockOver";
 		}
+        vacuumObjects.Clear();
+        active_controller_cone.SetActive(false);
     }
 
     void SlowDown()
