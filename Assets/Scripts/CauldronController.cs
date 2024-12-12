@@ -77,8 +77,8 @@ public class CauldronController : MonoBehaviour
 
         liquidSurfaceHeight = liquidSurface.transform.position.y;
 
-        requiredRecipe.Add("IngRed");
-        requiredRecipe.Add("IngBlue");
+        requiredRecipe.Add("Plant");
+        requiredRecipe.Add("Potion");
 
         liquidColor = new Color(0.0f, 0.0f, 0.0f);
         foamColor = new Color(0.0f, 0.0f, 0.0f);
@@ -140,7 +140,7 @@ public class CauldronController : MonoBehaviour
         currentFloaters.Add(ingredient);
         if (!requiredRecipe.Contains(ingredient)) {
             // Accelerate time to explode
-            IncrementTimeToExplode(1000);
+            IncrementTimeToExplode(3000);
         } else {
             bool allContains = true;
             foreach (string ing in requiredRecipe) {
