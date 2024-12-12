@@ -60,7 +60,7 @@ public class CauldronController : MonoBehaviour
     public float upwardsModifier;
 
     private AudioClipPlayer audioPlayerBoiling;
-    public AudioClipPlayer audioPlayerExplosion;
+    public GameObject audioPlayerExplosion;
     private float minVolume = 0.1f;
     private float maxVolume = 1.0f;
     private float solvedLastVolume;
@@ -170,6 +170,10 @@ public class CauldronController : MonoBehaviour
 
     void Explode()
     {
+        if (exploded) return;
+
+        audioPlayerBoiling.StopClip();
+
         cauldronWhole.SetActive(false);
         cauldronFractured.SetActive(true);
         liquidSurface.SetActive(false);
@@ -188,9 +192,7 @@ public class CauldronController : MonoBehaviour
         foreach(GameObject obj in floatingObjects) {
             obj.GetComponent<IngredientController>().CauldronExploded();
         }
-
-        audioPlayerBoiling.StopClip();
-        audioPlayerExplosion.PlayClip();
+        audioPlayerExplosion.GetComponent<AudioClipPlayer>().PlayClip();
 
         exploded = true;
         GameManager.instance.CauldronStatusUpdate(false);

@@ -24,6 +24,7 @@ public class UIManager : MonoBehaviour
     public TextMeshPro textDustBunnyCounter;
     public TextMeshPro textManaPoints;
     public TextMeshPro textProgressPoints;
+    public TextMeshPro textCauldron;
 
     private string maxBunnyCounterString;
     private string maxManaString;
@@ -44,7 +45,8 @@ public class UIManager : MonoBehaviour
     public void InitializeUI(int maxBunnyCounter_, int maxMana_, int maxProgress_) {
         maxBunnyCounterString = " / " + maxBunnyCounter_.ToString();
         maxManaString = " / " + maxMana_.ToString();
-        maxProgressString = " / " + maxProgress_.ToString();
+        maxProgressString = " %";
+        textCauldron.text = "Unstable";
     }
 
     public void UpdateDustBunnyCounter(int counter) {
@@ -57,5 +59,13 @@ public class UIManager : MonoBehaviour
 
     public void UpdateProgressPoints(int progress) {
         textProgressPoints.text = progress.ToString() + maxProgressString;
+    }
+
+    public void UpdateCauldronStatus(bool solved) {
+        if (solved) {
+            textCauldron.text = "Stable!";
+        } else {
+            textCauldron.text = "Exploded :(";
+        }
     }
 }

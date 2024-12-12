@@ -11,7 +11,7 @@ public class AudioClipPlayer : MonoBehaviour
     public bool loopAudio = false;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         audio = GetComponent<AudioSource>();
         audio.clip = audioClip;

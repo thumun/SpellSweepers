@@ -39,6 +39,8 @@ public class GameManager : MonoBehaviour
     private int levelOfChaos = 0;
     private bool cauldronFailed = false;
 
+    public Animator doorAnimator;
+
     // For UI
     private string dustBunniesLengthString;
     private string maxManaString;
@@ -96,7 +98,9 @@ public class GameManager : MonoBehaviour
         } else {
             IncrementLevelOfChaos(10);
             cauldronFailed = true;
+        doorAnimator.Play("DoorOpen", 0, 0.0f);
         }
+        UIManager.instance.UpdateCauldronStatus(solved);
     }
 
     public void CaptureDustBunny() {
@@ -131,6 +135,7 @@ public class GameManager : MonoBehaviour
 
     public void LevelClear() {
         isLevelClear = true;
+        doorAnimator.Play("DoorOpen", 0, 0.0f);
         Debug.Log("Level clear");
     }
 }
