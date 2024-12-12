@@ -10,15 +10,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 6550aa7f5e892a145856ab11d3d57d41, type: 3}
       propertyPath: m_LocalScale.x
-      value: 21.269007
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6550aa7f5e892a145856ab11d3d57d41, type: 3}
       propertyPath: m_LocalScale.y
-      value: 21.269007
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6550aa7f5e892a145856ab11d3d57d41, type: 3}
       propertyPath: m_LocalScale.z
-      value: 21.269003
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6550aa7f5e892a145856ab11d3d57d41, type: 3}
       propertyPath: m_LocalPosition.x
@@ -68,6 +68,18 @@ PrefabInstance:
       propertyPath: m_TagString
       value: KnockOver
       objectReference: {fileID: 0}
+    - target: {fileID: 5560379188203816205, guid: 6550aa7f5e892a145856ab11d3d57d41, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 21.26901
+      objectReference: {fileID: 0}
+    - target: {fileID: 5560379188203816205, guid: 6550aa7f5e892a145856ab11d3d57d41, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 21.26901
+      objectReference: {fileID: 0}
+    - target: {fileID: 5560379188203816205, guid: 6550aa7f5e892a145856ab11d3d57d41, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 21.26901
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -106,7 +118,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.0125, y: 0.015, z: 0.02}
+  m_Size: {x: 0.3, y: 0.3, z: 0.4}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &5321310309033889357
 Rigidbody:
@@ -116,7 +128,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8517912799126937161}
   serializedVersion: 4
-  m_Mass: 0.3
+  m_Mass: 3
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}

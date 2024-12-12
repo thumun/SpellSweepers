@@ -34,7 +34,7 @@ public class IngredientController : MonoBehaviour
     {
         if (!inCauldron) return;
 
-        float diff = transform.position.y - transform.localScale.y * 2.0f - surfaceHeight;
+        float diff = transform.position.y - transform.localScale.y - surfaceHeight;
         if (diff < 0) {
             m_rigidbody.AddForceAtPosition(Vector3.up * floatingPower * Mathf.Abs(diff), transform.position, ForceMode.Force);
             if (!underwater) {
