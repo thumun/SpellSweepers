@@ -98,7 +98,6 @@ public class GameManager : MonoBehaviour
         } else {
             IncrementLevelOfChaos(10);
             cauldronFailed = true;
-        doorAnimator.Play("DoorOpen", 0, 0.0f);
         }
         UIManager.instance.UpdateCauldronStatus(solved);
     }
