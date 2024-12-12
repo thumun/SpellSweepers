@@ -26,6 +26,7 @@ using AOT;
 using UnityEngine.UI;
 using UnityEngine.XR;
 using InputDevice = UnityEngine.XR.InputDevice;
+using TMPro; 
 #if UNITY_ANDROID
 using UnityEngine.Networking;
 #endif
@@ -37,6 +38,7 @@ using Palmmedia.ReportGenerator.Core.CodeAnalysis;
 using System.Security;
 using UnityEditor.Search;
 using UnityEditor.PackageManager;
+using TMPro;
 
 #endif
 
@@ -83,7 +85,7 @@ public class SpellCasting : MonoBehaviour
     public List<Transform> vacuumObjects = new List<Transform>();
 
     private List<Vector3> trackingPos = new List<Vector3>();
-    private float velocity = 1000f; 
+    private float velocity = 70f; 
 
     [SerializeField]
     private GameObject active_controller_move = null;
@@ -97,6 +99,7 @@ public class SpellCasting : MonoBehaviour
 	public GameObject LeftMoveRef = null;
 
     public GameObject coneRT = null;
+    public GameObject coneLT = null; 
 
     internal enum SPELLS { NONE, CONTROL, SLOWDOWN, VACUUM }
     internal SPELLS currentSpell = SPELLS.NONE;
@@ -107,7 +110,8 @@ public class SpellCasting : MonoBehaviour
 	private GestureRecognition gr = new GestureRecognition();
 
     // The text field to display instructions.
-    private Text HUDText;
+	[SerializeField]
+	private TextMeshPro HUDText;
 
 	// The game object associated with the currently active controller (if any):
 	[SerializeField]
@@ -178,7 +182,10 @@ public class SpellCasting : MonoBehaviour
     // Initialization:
     void Start ()
     {
+        //HUDText = SpellUI.GetComponent<TextMeshProUGUI>();
+
         // Set the welcome message.
+        /*
         HUDText = GameObject.Find("HUDText").GetComponent<Text>();
         HUDText.text = "Welcome to MARUI Gesture Plug-in!\n"
                       + "Press the trigger to draw a gesture. Available gestures:\n"
@@ -187,6 +194,7 @@ public class SpellCasting : MonoBehaviour
                       + "3 - shake (delete object)\n"
                       + "4 - draw a sword from your hip,\nhold it over your head (magic)\n"
                       + "or: press 'A'/'X'/Menu button\nto create new gesture.";
+        */
 
         me = GCHandle.Alloc(this);
 
@@ -248,13 +256,13 @@ public class SpellCasting : MonoBehaviour
             byte[] file_contents = File.ReadAllBytes(gesture_file_path);
             if (file_contents == null || file_contents.Length == 0)
             {
-                HUDText.text = $"Could not find gesture database file ({gesture_file_path}).";
+                //HUDText.text = $"Could not find gesture database file ({gesture_file_path}).";
                 return;
             }
             ret = gr.loadFromBuffer(file_contents);
             if (ret != 0)
             {
-                HUDText.text = $"Failed to load sample gesture database file ({ret}).";
+                //HUDText.text = $"Failed to load sample gesture database file ({ret}).";
                 return;
             }
         }
@@ -463,7 +471,7 @@ public class SpellCasting : MonoBehaviour
                 ctrlActive = true;
             }
 		}
-        else if (gesture_id == 1 || gesture_id == 2 || gesture_id == 3)
+        else if (gesture_id == 1 || gesture_id == 2)
         {
             // "swipe left"-gesture: rotate left
             HUDText.text = "Identified Vaccuum Spell";
@@ -485,7 +493,7 @@ public class SpellCasting : MonoBehaviour
         else
         {
             // Other ID: one of the user-registered gestures:
-            HUDText.text = "Unknown Gesture: " + (gesture_id - 4);
+            HUDText.text = "Unknown Gesture: " + (gesture_id);
         }
     }
 
@@ -515,7 +523,7 @@ public class SpellCasting : MonoBehaviour
                 {
                     trackingPos.RemoveAt(0);
                 }
-                trackingPos.Add(transform.position);
+                trackingPos.Add(selectedObject.transform.position);
 
 				Debug.Log("Moving");
 			}
@@ -540,7 +548,15 @@ public class SpellCasting : MonoBehaviour
 				selectedObject.GetComponent<Rigidbody>().isKinematic = false;
 				trackingPos.Clear();
 
-				selectedObject.gameObject.GetComponent<Renderer>().material.color = originalObjColor;
+                if (selectedObject.transform.CompareTag("ToxicBottle"))
+                {
+                    selectedObject.transform.GetChild(0).gameObject.GetComponent<Renderer>().material.color = originalObjColor;
+				}
+                else
+                {
+					selectedObject.gameObject.GetComponent<Renderer>().material.color = originalObjColor;
+				}
+
 				selectedObject = null;
 
 				itemDropped = false;
@@ -570,6 +586,7 @@ public class SpellCasting : MonoBehaviour
             GameObject lvl = GameObject.Find("Level");
 			item.transform.SetParent(lvl.transform);
 			//item.transform.GetComponent<Rigidbody>().isKinematic = true;
+			item.GetComponent<Rigidbody>().AddForce(new Vector3(0, 0, 0) * velocity);
 			item.transform.GetComponent<Rigidbody>().useGravity = true;
 			item.gameObject.tag = "KnockOver";
 		}
@@ -628,15 +645,24 @@ public class SpellCasting : MonoBehaviour
 			}
             
 			Ray rightRay = new Ray(rightLaser.position, rightLaser.forward);
-			bool rightHit = !leftHit && Physics.Raycast(rightRay, out hitInfo);
+			bool rightHit = /*!leftHit &&*/ Physics.Raycast(rightRay, out hitInfo);
 			if (rightHit)
 			{
 				if (hitInfo.transform.CompareTag("KnockOver") || hitInfo.transform.CompareTag("ToxicBottle") || hitInfo.transform.CompareTag("Cauldron") || hitInfo.transform.CompareTag("Cat"))
 				{
 					// select object 
 					selectedObject = hitInfo.transform;
-					originalObjColor = selectedObject.gameObject.GetComponent<Renderer>().material.color;
-					selectedObject.gameObject.GetComponent<Renderer>().material.color = selectedColor;
+
+                    if (selectedObject.transform.CompareTag("ToxicBottle"))
+                    {
+                        originalObjColor = selectedObject.transform.GetChild(0).gameObject.GetComponent<Renderer>().material.color;
+                        selectedObject.transform.GetChild(0).gameObject.GetComponent<Renderer>().material.color = selectedColor;
+					}
+                    else
+                    {
+						originalObjColor = selectedObject.gameObject.GetComponent<Renderer>().material.color;
+						selectedObject.gameObject.GetComponent<Renderer>().material.color = selectedColor;
+					}
 
 					return true; 
 				}

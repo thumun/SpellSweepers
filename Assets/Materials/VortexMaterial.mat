@@ -39,7 +39,9 @@ Material:
     m_Ints: []
     m_Floats:
     - _BUILTIN_QueueControl: 0
-    - _Dissolve: 0.23
+    - _Dissolve: 0.267
+    - _WobbleAmount: 0.226
     m_Colors:
     - _Color: {r: 4.56, g: 6.9160013, b: 12, a: 1}
+    - _TwirlCenter: {r: 0.5, g: 2, b: 0, a: 0}
   m_BuildTextureStacks: []
