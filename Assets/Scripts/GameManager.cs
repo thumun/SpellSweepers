@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private float timer;
+    private float maxTime;
 
     public Animator doorAnimator;
 
@@ -45,17 +46,18 @@ public class GameManager : MonoBehaviour
     {
         dustBunniesLengthString = dustBunnies.Length.ToString();
 
-        UIManager.instance.InitializeUI(dustBunnies.Length);
+        maxTime = 300.0f;
+        timer = maxTime;
+
+        UIManager.instance.InitializeUI(dustBunnies.Length, maxTime);
 
         UIManager.instance.UpdateDustBunnyCounter(dustBunnyCounter);
         UIManager.instance.UpdateProgressPoints(currentProgressPoints);
-
-        timer = 300.0f;
     }
 
     void Update() {
         if (isGameOver) return;
-        
+
         timer -= Time.deltaTime;
         UIManager.instance.UpdateTime(timer);
 

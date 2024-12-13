@@ -24,10 +24,11 @@ public class UIManager : MonoBehaviour
     public TextMeshPro textDustBunnyCounter;
     public TextMeshPro textProgressPoints;
     public TextMeshPro textCauldron;
-    public TextMeshPro textTimer;
+    public Transform transformClockFinger;
 
     private string maxBunnyCounterString;
     private string maxProgressString;
+    private float maxTime;
     
     // Start is called before the first frame update
     void Start()
@@ -41,10 +42,11 @@ public class UIManager : MonoBehaviour
         
     }
 
-    public void InitializeUI(int maxBunnyCounter_) {
+    public void InitializeUI(int maxBunnyCounter_, float maxTime_) {
         maxBunnyCounterString = " / " + maxBunnyCounter_.ToString();
         maxProgressString = " %";
         textCauldron.text = "Unstable";
+        maxTime = maxTime_;
     }
 
     public void UpdateDustBunnyCounter(int counter) {
@@ -64,6 +66,6 @@ public class UIManager : MonoBehaviour
     }
 
     public void UpdateTime(float time) {
-        textTimer.text = Mathf.RoundToInt(time).ToString() + "s";
+        transformClockFinger.eulerAngles = new Vector3(transformClockFinger.eulerAngles.x, transformClockFinger.eulerAngles.y, (1.0f - time / maxTime) * 360); 
     }
 }
