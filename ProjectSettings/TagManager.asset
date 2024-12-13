@@ -12,6 +12,8 @@ TagManager:
   - Cat
   - DustBunny
   - ToxicBottle
+  - StartBtn
+  - QuitBtn
   layers:
   - Default
   - TransparentFX

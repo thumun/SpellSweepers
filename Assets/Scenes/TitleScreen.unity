@@ -1148,6 +1148,7 @@ GameObject:
   - component: {fileID: 869648691}
   - component: {fileID: 869648695}
   - component: {fileID: 869648696}
+  - component: {fileID: 869648697}
   m_Layer: 0
   m_Name: OVRCameraRig
   m_TagString: Player
@@ -1323,6 +1324,20 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 869648690}
   m_Enabled: 1
+--- !u!114 &869648697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 869648690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 476767ef338a5f14a9f88df01ebbdd62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftLaser: {fileID: 272188100}
+  rightLaser: {fileID: 1848578161}
 --- !u!1 &896450305
 GameObject:
   m_ObjectHideFlags: 0
@@ -1449,9 +1464,10 @@ GameObject:
   - component: {fileID: 1029043526}
   - component: {fileID: 1029043525}
   - component: {fileID: 1029043524}
+  - component: {fileID: 1029043527}
   m_Layer: 5
   m_Name: BtnStartGame
-  m_TagString: Untagged
+  m_TagString: StartBtn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1570,6 +1586,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1029043522}
   m_CullTransparentMesh: 1
+--- !u!65 &1029043527
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1029043522}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 84.841194, y: 18.863762, z: 0.23901951}
+  m_Center: {x: -2.3735614, y: -0.04143715, z: -0.015626013}
 --- !u!1 &1189732062
 GameObject:
   m_ObjectHideFlags: 0
@@ -1925,6 +1962,7 @@ GameObject:
   - component: {fileID: 1549419183}
   - component: {fileID: 1549419182}
   - component: {fileID: 1549419181}
+  - component: {fileID: 1549419184}
   m_Layer: 5
   m_Name: BtnExitGame
   m_TagString: Untagged
@@ -2046,6 +2084,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1549419179}
   m_CullTransparentMesh: 1
+--- !u!65 &1549419184
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1549419179}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 79.58471, y: 16.76187, z: 0.41267824}
+  m_Center: {x: -0.9045243, y: 1.1960953, z: -0.06762636}
 --- !u!1001 &1635677815
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3115,7 +3174,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &919132147487674960
 MonoBehaviour:
   m_ObjectHideFlags: 0
