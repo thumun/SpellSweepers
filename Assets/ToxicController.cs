@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.AI;
+using TMPro; 
 
 public class ToxicController : MonoBehaviour
 {
@@ -13,7 +14,9 @@ public class ToxicController : MonoBehaviour
     private bool initiateDustBunny = false;
     private float radius = 10.0f;
     [SerializeField]
-    private GameObject bunny; 
+    private Transform bunny;
+
+    public GameObject bunnyCountUI; 
 	//public NavMeshAgent agent;
 
 	// add dust bunny counter var  
@@ -51,6 +54,19 @@ public class ToxicController : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    void UpdateUI()
+    {
+        //"0 / 0"
+
+        var uiItems = bunnyCountUI.gameObject.GetComponent<TextMeshPro>().text.ToString().Split('/');
+
+        int counter = int.Parse(uiItems[uiItems.Length - 1]);
+        counter += 1;
+
+		bunnyCountUI.gameObject.GetComponent<TextMeshPro>().text = $"{uiItems[0]} / {counter}";
+
+	}
+
     void SpawnBunnies()
     {
 		// based on navmesh to make things easier
@@ -67,6 +83,7 @@ public class ToxicController : MonoBehaviour
 
 		// instantiate a dust bunny at final position  
         Instantiate(bunny, finalPosition, Quaternion.identity);
+        UpdateUI();
 
 		initiateDustBunny = false; 
     }
