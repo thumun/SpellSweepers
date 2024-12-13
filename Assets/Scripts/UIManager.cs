@@ -22,12 +22,11 @@ public class UIManager : MonoBehaviour
     private static UIManager m_instance;
 
     public TextMeshPro textDustBunnyCounter;
-    public TextMeshPro textManaPoints;
     public TextMeshPro textProgressPoints;
     public TextMeshPro textCauldron;
+    public TextMeshPro textTimer;
 
     private string maxBunnyCounterString;
-    private string maxManaString;
     private string maxProgressString;
     
     // Start is called before the first frame update
@@ -42,19 +41,14 @@ public class UIManager : MonoBehaviour
         
     }
 
-    public void InitializeUI(int maxBunnyCounter_, int maxMana_, int maxProgress_) {
+    public void InitializeUI(int maxBunnyCounter_) {
         maxBunnyCounterString = " / " + maxBunnyCounter_.ToString();
-        maxManaString = " / " + maxMana_.ToString();
         maxProgressString = " %";
         textCauldron.text = "Unstable";
     }
 
     public void UpdateDustBunnyCounter(int counter) {
         textDustBunnyCounter.text = counter.ToString() + maxBunnyCounterString;
-    }
-
-    public void UpdateManaPoints(int mana) {
-        textManaPoints.text = mana.ToString() + maxManaString;
     }
 
     public void UpdateProgressPoints(int progress) {
@@ -67,5 +61,9 @@ public class UIManager : MonoBehaviour
         } else {
             textCauldron.text = "Exploded :(";
         }
+    }
+
+    public void UpdateTime(float time) {
+        textTimer.text = Mathf.RoundToInt(time).ToString() + "s";
     }
 }

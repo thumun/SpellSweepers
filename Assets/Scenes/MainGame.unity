@@ -3055,12 +3055,12 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 9051973794933067176}
+  - {fileID: 7456396179218720350}
   - {fileID: 512526090}
   - {fileID: 1282969808}
   - {fileID: 1595004453}
   - {fileID: 1930366729}
-  - {fileID: 7456396179218720350}
-  - {fileID: 9051973794933067176}
   - {fileID: 2818268082545526233}
   - {fileID: 14469307596338173}
   - {fileID: 949613716}
@@ -3084,9 +3084,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textDustBunnyCounter: {fileID: 1930366730}
-  textManaPoints: {fileID: 8205405437098412633}
   textProgressPoints: {fileID: 6459177201498288339}
   textCauldron: {fileID: 1282969809}
+  textTimer: {fileID: 8205405437098412633}
 --- !u!1 &1019808356
 GameObject:
   m_ObjectHideFlags: 0
@@ -5580,9 +5580,6 @@ MonoBehaviour:
   - {fileID: 1580490151}
   - {fileID: 1492646280}
   - {fileID: 1209904541}
-  spellControlCost: 10
-  spellVacuumCost: 20
-  spellSlowDownCost: 15
   doorAnimator: {fileID: 20355474}
 --- !u!4 &2019757592
 Transform:
@@ -6439,7 +6436,7 @@ GameObject:
   - component: {fileID: 6682452475153659167}
   - component: {fileID: 3192992691272343724}
   m_Layer: 0
-  m_Name: ManaTxt
+  m_Name: TimeTxt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6779,7 +6776,7 @@ GameObject:
   - component: {fileID: 1841554865174983945}
   - component: {fileID: 8205405437098412633}
   m_Layer: 0
-  m_Name: ManaPoints
+  m_Name: TimeLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7049,7 +7046,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Mana
+  m_text: Time
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d04c525352d83dc4ea9ba239e00c5d56, type: 2}
   m_sharedMaterial: {fileID: -8343131056365762723, guid: d04c525352d83dc4ea9ba239e00c5d56, type: 2}
@@ -8465,7 +8462,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 100/100
+  m_text: 300s
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d04c525352d83dc4ea9ba239e00c5d56, type: 2}
   m_sharedMaterial: {fileID: -8343131056365762723, guid: d04c525352d83dc4ea9ba239e00c5d56, type: 2}

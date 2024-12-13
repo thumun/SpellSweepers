@@ -25,19 +25,14 @@ public class GameManager : MonoBehaviour
     public GameObject[] dustBunnies;
     private int dustBunnyCounter = 0;
 
-    // Mana related
-    private int currentManaPoints = 10000;
-    private int maxManaPoints = 100;
-    private bool castingVacuum = false;
-    public int spellControlCost = 10;
-    public int spellVacuumCost = 20;
-    public int spellSlowDownCost = 15;
-
     // Progress related
     private int currentProgressPoints = 0;
     private int maxProgressPoints = 60;
     private int levelOfChaos = 0;
     private bool cauldronFailed = false;
+
+    [SerializeField]
+    private float timer;
 
     public Animator doorAnimator;
 
@@ -49,46 +44,26 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         dustBunniesLengthString = dustBunnies.Length.ToString();
-        maxManaString = maxManaPoints.ToString();
 
-        UIManager.instance.InitializeUI(dustBunnies.Length, maxManaPoints, maxProgressPoints);
+        UIManager.instance.InitializeUI(dustBunnies.Length);
 
         UIManager.instance.UpdateDustBunnyCounter(dustBunnyCounter);
-        UIManager.instance.UpdateManaPoints(currentManaPoints);
         UIManager.instance.UpdateProgressPoints(currentProgressPoints);
+
+        timer = 300.0f;
     }
 
-    public bool TryCastSpell(int spellId) {
-        bool updated = false;
-        if (spellId == 0) {
-            // Control spell
-            if (currentManaPoints >= spellControlCost) {
-                currentManaPoints -= spellControlCost;
-                updated = true;
-            }
-        } else if (spellId == 1) {
-            // Vacuum spell
-            //if (castingVacuum) {
-            //    castingVacuum = false;
-            //    updated = true;
-            //} else if (currentManaPoints >= spellVacuumCost) {
-                castingVacuum = true;
-                currentManaPoints -= spellVacuumCost;
-                updated = true;
-            //}
-        } else if (spellId == 2) {
-            // Slow down spell
-            if (currentManaPoints >= spellSlowDownCost) {
-                currentManaPoints -= spellSlowDownCost;
-                updated = true;
-            }
-        }
+    void Update() {
+        if (isGameOver) return;
+        
+        timer -= Time.deltaTime;
+        UIManager.instance.UpdateTime(timer);
 
-        if (updated) {
-            UIManager.instance.UpdateManaPoints(currentManaPoints);
+        if (timer <= 0.0f) {
+            timer = 0.0f;
+            UIManager.instance.UpdateTime(timer);
+            GameOver();
         }
-
-        return updated;
     }
 
     public void CauldronStatusUpdate(bool solved) {
