@@ -564,14 +564,7 @@ public class SpellCasting : MonoBehaviour
 				selectedObject.GetComponent<Rigidbody>().isKinematic = false;
 				trackingPos.Clear();
 
-                if (selectedObject.transform.CompareTag("ToxicBottle"))
-                {
-                    selectedObject.transform.GetChild(0).gameObject.GetComponent<Renderer>().material.color = originalObjColor;
-				}
-                else
-                {
-					selectedObject.gameObject.GetComponent<Renderer>().material.color = originalObjColor;
-				}
+				selectedObject.transform.GetChild(0).gameObject.GetComponent<Renderer>().material.color = originalObjColor;
 
 				selectedObject = null;
 
@@ -659,9 +652,10 @@ public class SpellCasting : MonoBehaviour
                 {
 					// select object 
 					selectedObject = hitInfo.transform;
-                    originalObjColor = selectedObject.gameObject.GetComponent<Renderer>().material.color;
-					selectedObject.gameObject.GetComponent<Renderer>().material.color = selectedColor;
-                    
+
+					originalObjColor = selectedObject.transform.GetChild(0).gameObject.GetComponent<Renderer>().material.color;
+					selectedObject.transform.GetChild(0).gameObject.GetComponent<Renderer>().material.color = selectedColor;
+
 					return true;
 				}
 				//return hitInfo.transform;
@@ -676,16 +670,8 @@ public class SpellCasting : MonoBehaviour
 					// select object 
 					selectedObject = hitInfo.transform;
 
-                    if (selectedObject.transform.CompareTag("ToxicBottle"))
-                    {
-                        originalObjColor = selectedObject.transform.GetChild(0).gameObject.GetComponent<Renderer>().material.color;
-                        selectedObject.transform.GetChild(0).gameObject.GetComponent<Renderer>().material.color = selectedColor;
-					}
-                    else
-                    {
-						originalObjColor = selectedObject.gameObject.GetComponent<Renderer>().material.color;
-						selectedObject.gameObject.GetComponent<Renderer>().material.color = selectedColor;
-					}
+					originalObjColor = selectedObject.transform.GetChild(0).gameObject.GetComponent<Renderer>().material.color;
+					selectedObject.transform.GetChild(0).gameObject.GetComponent<Renderer>().material.color = selectedColor;
 
 					return true; 
 				}
