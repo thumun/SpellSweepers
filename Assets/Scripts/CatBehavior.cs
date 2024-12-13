@@ -112,7 +112,8 @@ public class CatBehavior : MonoBehaviour
 		if (caught >= 3)
 		{
 			// ends cat quest 
-			//GameManager.instance.catHandled = true;
+			UIManager.instance.textCat.text = "Banished!";
+			GameManager.instance.catHandled = true;
 			this.gameObject.SetActive(false);
 		}
 

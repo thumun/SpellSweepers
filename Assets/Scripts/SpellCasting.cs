@@ -623,10 +623,11 @@ public class SpellCasting : MonoBehaviour
 			if (selectedObject != null && selectedObject.CompareTag("Cauldron"))
 			{
                 // lower time 
-                CauldronController cauldron = selectedObject.GetComponent<CauldronController>();
-                cauldron.timeToExplode -= 500;
+                //CauldronController cauldron = selectedObject.GetComponent<CauldronController>();
+                CauldronController.instance.timeToExplode += 500;
+                //cauldron.timeToExplode -= 500;
 				slowActive = false;
-				selectedObject.gameObject.GetComponent<Renderer>().material.color = originalObjColor;
+				//selectedObject.gameObject.GetComponent<Renderer>().material.color = originalObjColor;
 				selectedObject = null;
                 currentSpell = SPELLS.NONE;
 			}
@@ -636,7 +637,7 @@ public class SpellCasting : MonoBehaviour
                 CatBehavior cat = selectedObject.GetComponent<CatBehavior>();
                 cat.slowDown = true; 
                 slowActive = false;
-				selectedObject.gameObject.GetComponent<Renderer>().material.color = originalObjColor;
+				//selectedObject.gameObject.GetComponent<Renderer>().material.color = originalObjColor;
 				selectedObject = null;
                 currentSpell = SPELLS.NONE;
 			}
@@ -665,7 +666,12 @@ public class SpellCasting : MonoBehaviour
 
 					return true;
 				}
-                else if (hitInfo.transform.CompareTag("StartBtn"))
+				else if (hitInfo.transform.CompareTag("Cauldron") || hitInfo.transform.CompareTag("Cat"))
+				{
+					selectedObject = hitInfo.transform;
+					return true;
+				}
+				else if (hitInfo.transform.CompareTag("StartBtn"))
                 {
 					SceneManager.LoadScene(0);
 					return false;
@@ -677,7 +683,7 @@ public class SpellCasting : MonoBehaviour
 			bool rightHit = /*!leftHit &&*/ Physics.Raycast(rightRay, out hitInfo);
 			if (rightHit)
 			{
-				if (hitInfo.transform.CompareTag("KnockOver") || hitInfo.transform.CompareTag("ToxicBottle") || hitInfo.transform.CompareTag("Cauldron") || hitInfo.transform.CompareTag("Cat"))
+				if (hitInfo.transform.CompareTag("KnockOver") || hitInfo.transform.CompareTag("ToxicBottle"))
 				{
 					// select object 
 					selectedObject = hitInfo.transform;
@@ -686,6 +692,11 @@ public class SpellCasting : MonoBehaviour
 					selectedObject.transform.GetChild(0).gameObject.GetComponent<Renderer>().material.color = selectedColor;
 
 					return true; 
+				}
+                else if (hitInfo.transform.CompareTag("Cauldron") || hitInfo.transform.CompareTag("Cat"))
+                {
+					selectedObject = hitInfo.transform;
+                    return true;
 				}
                 else if (hitInfo.transform.CompareTag("StartBtn"))
                 {

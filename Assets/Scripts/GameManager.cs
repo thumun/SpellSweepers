@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
     private int maxProgressPoints = 60;
     private int levelOfChaos = 0;
     private bool cauldronFailed = false;
-    private bool catHandled = false;
+    public bool catHandled = false;
 
     public GameObject completionStar1;
     public GameObject completionStar2;
