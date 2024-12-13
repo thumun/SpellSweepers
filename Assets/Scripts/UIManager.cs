@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class UIManager : MonoBehaviour
@@ -25,6 +26,8 @@ public class UIManager : MonoBehaviour
     public TextMeshPro textProgressPoints;
     public TextMeshPro textCauldron;
     public Transform transformClockFinger;
+
+    public Button btnGameOver;
 
     private string maxBunnyCounterString;
     private string maxProgressString;
@@ -66,6 +69,12 @@ public class UIManager : MonoBehaviour
     }
 
     public void UpdateTime(float time) {
+        if (SceneManager.GetActiveScene().buildIndex != 1) return;
+        
         transformClockFinger.eulerAngles = new Vector3(transformClockFinger.eulerAngles.x, transformClockFinger.eulerAngles.y, (1.0f - time / maxTime) * 360); 
+    }
+
+    public void LoadStartMenu() {
+        SceneManager.LoadScene(0);
     }
 }

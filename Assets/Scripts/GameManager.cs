@@ -36,6 +36,8 @@ public class GameManager : MonoBehaviour
     public GameObject completionStar2;
     public GameObject completionStar3;
 
+    public GameObject canvasGameOver;
+
     [SerializeField]
     private float timer;
     private float maxTime;
@@ -64,6 +66,8 @@ public class GameManager : MonoBehaviour
         completionStar1.SetActive(false);
         completionStar2.SetActive(false);
         completionStar3.SetActive(false);
+
+        canvasGameOver.SetActive(false);
     }
 
     void Update() {
@@ -118,6 +122,7 @@ public class GameManager : MonoBehaviour
     public void GameOver() {
         isGameOver = true;
         clock.GetComponent<AudioClipPlayer>().StopClip();
+        canvasGameOver.SetActive(true);
         Debug.Log("Game over");
     }
 
