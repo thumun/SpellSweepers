@@ -699,6 +699,7 @@ public class SpellCasting : MonoBehaviour
     {
 		//HUDText.transform.position = this.transform.forward + this.transform.position;
 		HUDText.transform.position = centerEye.transform.forward + centerEye.transform.position;
+        HUDText.transform.rotation = centerEye.transform.rotation; 
 		HUDText.text = changetxt;
         HUDText.gameObject.SetActive(true);
         textTimer = 1.0f;
