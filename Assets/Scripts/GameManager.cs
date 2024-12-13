@@ -30,9 +30,9 @@ public class GameManager : MonoBehaviour
     private float currentManaPoints = 100.0f;
     private float maxManaPoints = 100.0f;
     private bool castingVacuum = false;
-    public float spellControlCost = 5.0f;
-    public float spellVacuumCost = 10.0f;
-    public float spellSlowDownCost = 5.0f;
+    private float spellControlCost = 5.0f;
+    private float spellVacuumCost = 10.0f;
+    private float spellSlowDownCost = 5.0f;
 
     // Progress related
     private int currentProgressPoints = 0;
@@ -88,6 +88,7 @@ public class GameManager : MonoBehaviour
             GameOver();
         }
     }
+    
     public bool TryCastSpell(int spellId) {
         bool updated = false;
         if (spellId == 0) {
@@ -117,7 +118,7 @@ public class GameManager : MonoBehaviour
         if (updated) {
             UIManager.instance.UpdateManaPoints(currentManaPoints / maxManaPoints);
         }
-        return false;
+        return updated;
     }
 
     public void CauldronStatusUpdate(bool solved) {

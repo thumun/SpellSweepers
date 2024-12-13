@@ -157,6 +157,8 @@ public class SpellCasting : MonoBehaviour
     // Database of all controller models in the scene
     private Dictionary<string, GameObject> controller_gameobjs = new Dictionary<string, GameObject>();
 
+    public GameObject spellSFXPlayer;
+
     // Helper function to set the currently active controller model
     void SetActiveControllerModel(string side, string type)
     {
@@ -294,8 +296,7 @@ public class SpellCasting : MonoBehaviour
         star.transform.localScale = new Vector3(0.0f, 0.0f, 0.0f);
         GameObject controller_dummy = GameObject.Find("controller_dummy");
         controller_dummy.transform.localScale = new Vector3(0.0f, 0.0f, 0.0f);
-    }
-    
+    }    
 
     // Update:
     void Update()
@@ -497,6 +498,8 @@ public class SpellCasting : MonoBehaviour
                 currentSpell = SPELLS.CONTROL;
                 //ctrlActive = !ctrlActive;
                 ctrlActive = true;
+
+                spellSFXPlayer.GetComponent<SpellSFXPlayer>().PlayControlSpell();
             }
 		}
         else if (gesture_id == 1 || gesture_id == 2)
@@ -508,6 +511,8 @@ public class SpellCasting : MonoBehaviour
                 currentSpell = SPELLS.VACUUM;
                 //vacuumActive = !vacuumActive;
                 vacuumActive = true;
+
+                spellSFXPlayer.GetComponent<SpellSFXPlayer>().PlayVacuumSpell();
             }
 		}
         else if (gesture_id == 4 || gesture_id == 3)
@@ -519,6 +524,8 @@ public class SpellCasting : MonoBehaviour
                 currentSpell = SPELLS.SLOWDOWN;
                 //slowActive = !slowActive; 
                 slowActive = true;
+
+                spellSFXPlayer.GetComponent<SpellSFXPlayer>().PlaySlowDownSpell();
             }
 		}
         else
