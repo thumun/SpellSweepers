@@ -30,6 +30,11 @@ public class GameManager : MonoBehaviour
     private int maxProgressPoints = 60;
     private int levelOfChaos = 0;
     private bool cauldronFailed = false;
+    private bool catHandled = false;
+
+    public GameObject completionStar1;
+    public GameObject completionStar2;
+    public GameObject completionStar3;
 
     [SerializeField]
     private float timer;
@@ -55,6 +60,10 @@ public class GameManager : MonoBehaviour
 
         UIManager.instance.UpdateDustBunnyCounter(dustBunnyCounter);
         UIManager.instance.UpdateProgressPoints(currentProgressPoints);
+
+        completionStar1.SetActive(false);
+        completionStar2.SetActive(false);
+        completionStar3.SetActive(false);
     }
 
     void Update() {
@@ -93,7 +102,7 @@ public class GameManager : MonoBehaviour
     private void IncrementProgressPoints(int pts) {
         currentProgressPoints += pts;
         // TODO : Also check for major puzzles / tasks / other failure conditions
-        if (currentProgressPoints > 0.8 * maxProgressPoints && !cauldronFailed) {
+        if (currentProgressPoints > 0.6 * maxProgressPoints) {
             LevelClear();
         }
     }
@@ -116,6 +125,22 @@ public class GameManager : MonoBehaviour
         isLevelClear = true;
         clock.GetComponent<AudioClipPlayer>().StopClip();
         doorAnimator.Play("DoorOpen", 0, 0.0f);
+
+        int numStars = 1;
+        if (!cauldronFailed) numStars++;
+        if (catHandled) numStars++;
+
+        if (numStars == 1) {
+            completionStar1.SetActive(true);
+        } else if (numStars == 2) {
+            completionStar2.SetActive(true);
+            completionStar3.SetActive(true);
+        } else if (numStars == 3) {
+            completionStar1.SetActive(true);
+            completionStar2.SetActive(true);
+            completionStar3.SetActive(true);
+        }
+
         Debug.Log("Level clear");
     }
 }
