@@ -90,7 +90,7 @@ public class CauldronController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (exploded) return;
+        if (exploded || GameManager.instance.isGameOver) return;
 
         if (solved) {
             if (solvedColorFinished) return;
@@ -107,6 +107,7 @@ public class CauldronController : MonoBehaviour
 
             currentVolume = solvedLastVolume / (float)solvedColorTimerMax * (float)(solvedColorTimerMax - solvedColorTimer) + minVolume / (float)solvedColorTimerMax * (float)solvedColorTimer;
             audioPlayerBoiling.ChangeVolume(currentVolume);
+            GameManager.instance.GainMana(30.0f);
             return;
         }
 

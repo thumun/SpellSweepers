@@ -113,7 +113,7 @@ public class CatBehavior : MonoBehaviour
 		{
 			// ends cat quest 
 			UIManager.instance.textCat.text = "Banished!";
-			GameManager.instance.catHandled = true;
+			GameManager.instance.HandledCat();
 			this.gameObject.SetActive(false);
 		}
 

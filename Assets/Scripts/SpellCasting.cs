@@ -493,24 +493,33 @@ public class SpellCasting : MonoBehaviour
             // "loop"-gesture: create cylinder
             SpellcastTxt("Identified Control Spell");
             //HUDText.text = "Identified Control Spell";
-            currentSpell = SPELLS.CONTROL;
-            ctrlActive = true;
+            if (GameManager.instance.TryCastSpell(0)) {
+                currentSpell = SPELLS.CONTROL;
+                //ctrlActive = !ctrlActive;
+                ctrlActive = true;
+            }
 		}
         else if (gesture_id == 1 || gesture_id == 2)
         {
             // "swipe left"-gesture: rotate left
             SpellcastTxt("Identified Vaccuum Spell");
             //HUDText.text = "Identified Vaccuum Spell";
-            currentSpell = SPELLS.VACUUM;
-            vacuumActive = true;
+            if (GameManager.instance.TryCastSpell(1)) {
+                currentSpell = SPELLS.VACUUM;
+                //vacuumActive = !vacuumActive;
+                vacuumActive = true;
+            }
 		}
         else if (gesture_id == 4 || gesture_id == 3)
         {
             SpellcastTxt("Identified Slow Down Spell");
 
 			//HUDText.text = "Identified Slow Down Spell";
-            currentSpell = SPELLS.SLOWDOWN;
-            slowActive = true;
+            if (GameManager.instance.TryCastSpell(2)) {
+                currentSpell = SPELLS.SLOWDOWN;
+                //slowActive = !slowActive; 
+                slowActive = true;
+            }
 		}
         else
         {

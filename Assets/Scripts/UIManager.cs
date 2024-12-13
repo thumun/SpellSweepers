@@ -23,6 +23,7 @@ public class UIManager : MonoBehaviour
     private static UIManager m_instance;
 
     public TextMeshPro textDustBunnyCounter;
+    public Image imgManaBar;
     public TextMeshPro textProgressPoints;
     public TextMeshPro textCauldron;
     public Transform transformClockFinger;
@@ -57,6 +58,10 @@ public class UIManager : MonoBehaviour
         textDustBunnyCounter.text = counter.ToString() + maxBunnyCounterString;
     }
 
+    public void UpdateManaPoints(float mana) {
+        imgManaBar.fillAmount = mana;
+    }
+
     public void UpdateProgressPoints(int progress) {
         textProgressPoints.text = progress.ToString() + maxProgressString;
     }
@@ -71,7 +76,7 @@ public class UIManager : MonoBehaviour
 
     public void UpdateTime(float time) {
         if (SceneManager.GetActiveScene().buildIndex != 1) return;
-        
+
         transformClockFinger.eulerAngles = new Vector3(transformClockFinger.eulerAngles.x, transformClockFinger.eulerAngles.y, (1.0f - time / maxTime) * 360); 
     }
 

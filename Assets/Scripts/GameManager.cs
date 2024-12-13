@@ -25,12 +25,21 @@ public class GameManager : MonoBehaviour
     public GameObject[] dustBunnies;
     private int dustBunnyCounter = 0;
 
+    // Mana related
+    [SerializeField]
+    private float currentManaPoints = 100.0f;
+    private float maxManaPoints = 100.0f;
+    private bool castingVacuum = false;
+    public float spellControlCost = 5.0f;
+    public float spellVacuumCost = 10.0f;
+    public float spellSlowDownCost = 5.0f;
+
     // Progress related
     private int currentProgressPoints = 0;
     private int maxProgressPoints = 60;
     private int levelOfChaos = 0;
     private bool cauldronFailed = false;
-    public bool catHandled = false;
+    private bool catHandled = false;
 
     public GameObject completionStar1;
     public GameObject completionStar2;
@@ -46,22 +55,17 @@ public class GameManager : MonoBehaviour
     public GameObject clock;
 
     public Animator doorAnimator;
-
-    // For UI
-    private string dustBunniesLengthString;
-    private string maxManaString;
     
     // Start is called before the first frame update
     void Start()
     {
-        dustBunniesLengthString = dustBunnies.Length.ToString();
-
         maxTime = 300.0f;
         timer = maxTime;
 
         UIManager.instance.InitializeUI(dustBunnies.Length, maxTime);
 
         UIManager.instance.UpdateDustBunnyCounter(dustBunnyCounter);
+        UIManager.instance.UpdateManaPoints(currentManaPoints / maxManaPoints);
         UIManager.instance.UpdateProgressPoints(currentProgressPoints);
 
         completionStar1.SetActive(false);
@@ -84,6 +88,37 @@ public class GameManager : MonoBehaviour
             GameOver();
         }
     }
+    public bool TryCastSpell(int spellId) {
+        bool updated = false;
+        if (spellId == 0) {
+            // Control spell
+            if (currentManaPoints >= spellControlCost) {
+                currentManaPoints -= spellControlCost;
+                updated = true;
+            }
+        } else if (spellId == 1) {
+            // Vacuum spell
+            //if (castingVacuum) {
+            //    castingVacuum = false;
+            //    updated = true;
+            //} else if (currentManaPoints >= spellVacuumCost) {
+                castingVacuum = true;
+                currentManaPoints -= spellVacuumCost;
+                updated = true;
+            //}
+        } else if (spellId == 2) {
+            // Slow down spell
+            if (currentManaPoints >= spellSlowDownCost) {
+                currentManaPoints -= spellSlowDownCost;
+                updated = true;
+            }
+        }
+
+        if (updated) {
+            UIManager.instance.UpdateManaPoints(currentManaPoints / maxManaPoints);
+        }
+        return false;
+    }
 
     public void CauldronStatusUpdate(bool solved) {
         if (solved) {
@@ -101,6 +136,7 @@ public class GameManager : MonoBehaviour
 
         dustBunnyCounter += 1;
         IncrementProgressPoints(10);
+        GainMana(10.0f);
         UIManager.instance.UpdateDustBunnyCounter(dustBunnyCounter);
         UIManager.instance.UpdateProgressPoints(currentProgressPoints);
     }
@@ -119,6 +155,18 @@ public class GameManager : MonoBehaviour
         if (levelOfChaos >= 0.3f * maxProgressPoints) {
             GameOver();
         }
+    }
+
+    public void HandledCat() {
+        catHandled = true;
+        GainMana(50.0f);
+        IncrementProgressPoints(40);
+    }
+
+    public void GainMana(float pts) {
+        currentManaPoints += pts;
+        if (currentManaPoints >= maxManaPoints) currentManaPoints = maxManaPoints;
+        UIManager.instance.UpdateManaPoints(currentManaPoints / maxManaPoints);
     }
 
     public void GameOver() {
