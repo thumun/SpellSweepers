@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.AI;
-using TMPro; 
+using TMPro;
+using System.Linq;
 
 public class ToxicController : MonoBehaviour
 {
@@ -73,6 +74,7 @@ public class ToxicController : MonoBehaviour
         else
         {
 			counter += 1;
+            UIManager.instance.maxBunnyCounter = counter; 
 			bunnyCountUI.gameObject.GetComponent<TextMeshPro>().text = $"{uiItems[0]} / {counter}";
             return true; 
 		}
@@ -93,6 +95,8 @@ public class ToxicController : MonoBehaviour
 		}
 
 		// instantiate a dust bunny at final position  
-        Instantiate(bunny, finalPosition, Quaternion.identity);
-    }
+        Transform b = Instantiate(bunny, finalPosition, Quaternion.identity);
+        //GameManager.instance.dustBunnies.
+
+	}
 }

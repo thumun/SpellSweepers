@@ -133,7 +133,7 @@ public class GameManager : MonoBehaviour
     }
 
     public void CaptureDustBunny() {
-        if (dustBunnyCounter >= dustBunnies.Length) return;
+        //if (dustBunnyCounter >= dustBunnies.Length) return;
 
         dustBunnyCounter += 1;
         IncrementProgressPoints(10);

@@ -31,7 +31,7 @@ public class UIManager : MonoBehaviour
 
 	public Button btnGameOver;
 
-    private string maxBunnyCounterString;
+    public int maxBunnyCounter;
     private string maxProgressString;
     private float maxTime;
     
@@ -48,14 +48,15 @@ public class UIManager : MonoBehaviour
     }
 
     public void InitializeUI(int maxBunnyCounter_, float maxTime_) {
-        maxBunnyCounterString = " / " + maxBunnyCounter_.ToString();
+        maxBunnyCounter = maxBunnyCounter_;
         maxProgressString = " %";
         textCauldron.text = "Unstable";
         maxTime = maxTime_;
     }
 
     public void UpdateDustBunnyCounter(int counter) {
-        textDustBunnyCounter.text = counter.ToString() + maxBunnyCounterString;
+        textDustBunnyCounter.text = $"{counter} / {maxBunnyCounter}"; 
+        //counter.ToString() + maxBunnyCounterString;
     }
 
     public void UpdateManaPoints(float mana) {

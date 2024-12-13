@@ -30,6 +30,10 @@ public class ConeLogic : MonoBehaviour
 			Debug.Log("dust bunny captured");
             GameManager.instance.CaptureDustBunny();
 		}
+        else if (other.CompareTag("Fractured")){
+			other.gameObject.SetActive(false);
+            Debug.Log("Cauldron cleaned up");
+		}
         else if (other.CompareTag("KnockOver"))
         {
             // attach to cone 
