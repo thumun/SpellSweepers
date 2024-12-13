@@ -504,7 +504,7 @@ public class SpellCasting : MonoBehaviour
             currentSpell = SPELLS.VACUUM;
             vacuumActive = true;
 		}
-        else if (gesture_id == 4)
+        else if (gesture_id == 4 || gesture_id == 3)
         {
             SpellcastTxt("Identified Slow Down Spell");
 
