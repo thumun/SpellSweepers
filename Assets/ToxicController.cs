@@ -16,7 +16,9 @@ public class ToxicController : MonoBehaviour
     [SerializeField]
     private Transform bunny;
 
-    public GameObject bunnyCountUI; 
+    public GameObject bunnyCountUI;
+    [SerializeField]
+    private int maxBunnies = 10; // how many bunnies should be in the scene at a time - cap at 10? 
 	//public NavMeshAgent agent;
 
 	// add dust bunny counter var  
@@ -37,9 +39,13 @@ public class ToxicController : MonoBehaviour
 		if (bunnyTimer <= 0.0f)
         {
             initiateDustBunny = true;
-            SpawnBunnies();
-            bunnyTimer = timer; 
-
+			bool canSpawn = UpdateUI();
+            if (canSpawn)
+            {
+				SpawnBunnies();
+			}
+			initiateDustBunny = false;
+			bunnyTimer = timer; 
 		}
 
         // check if the y pos and destroy 
@@ -54,17 +60,22 @@ public class ToxicController : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    void UpdateUI()
+    bool UpdateUI()
     {
-        //"0 / 0"
-
         var uiItems = bunnyCountUI.gameObject.GetComponent<TextMeshPro>().text.ToString().Split('/');
 
         int counter = int.Parse(uiItems[uiItems.Length - 1]);
-        counter += 1;
 
-		bunnyCountUI.gameObject.GetComponent<TextMeshPro>().text = $"{uiItems[0]} / {counter}";
-
+        if (counter > maxBunnies)
+        {
+            return false;
+        }
+        else
+        {
+			counter += 1;
+			bunnyCountUI.gameObject.GetComponent<TextMeshPro>().text = $"{uiItems[0]} / {counter}";
+            return true; 
+		}
 	}
 
     void SpawnBunnies()
@@ -83,8 +94,5 @@ public class ToxicController : MonoBehaviour
 
 		// instantiate a dust bunny at final position  
         Instantiate(bunny, finalPosition, Quaternion.identity);
-        UpdateUI();
-
-		initiateDustBunny = false; 
     }
 }

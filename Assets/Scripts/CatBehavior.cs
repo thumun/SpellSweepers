@@ -6,9 +6,11 @@ using BTAI;
 using UnityEngine.Experimental.XR.Interaction;
 using System.Threading;
 using UnityEngine.InputSystem.HID;
+using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public class CatBehavior : MonoBehaviour
 {
+
 	// might also need loc of player for flee behavior 
 
 	// navmesh -> using this for wander behavior 
@@ -24,14 +26,18 @@ public class CatBehavior : MonoBehaviour
 	private bool causeMischief = false;
 	private bool pauseTimer = false;
 
-	private Transform prevObj = null; 
-    
+	private Transform prevObj = null;
+
+	public int caught = 0;
+
 	// need to add anim controller for NPC 
 
-	
+
 	// Start is called before the first frame update
 	void Start()
     {
+		caught = 0; 
+
         agent = this.GetComponent<NavMeshAgent>();
 
 		btRoot.OpenBranch(
@@ -60,18 +66,18 @@ public class CatBehavior : MonoBehaviour
 		}
 		
 		// testing purposes --> testing the control spell 
-		if (Input.GetKeyDown(KeyCode.W))
-		{
-			slowDown = true;
-			Debug.Log($"Control Cat?: {slowDown}");
-		}
+		//if (Input.GetKeyDown(KeyCode.W))
+		//{
+		//	slowDown = true;
+		//	Debug.Log($"Control Cat?: {slowDown}");
+		//}
 
-		// testing purposes --> mischief 
-		if (Input.GetKeyDown(KeyCode.A))
-		{
-			Mischief();
-			Debug.Log($"Mischief: {slowDown}");
-		}
+		//// testing purposes --> mischief 
+		//if (Input.GetKeyDown(KeyCode.A))
+		//{
+		//	Mischief();
+		//	Debug.Log($"Mischief: {slowDown}");
+		//}
 
 		// reset bool once cat goes to obj 
 		if (causeMischief && prevObj != null)
@@ -96,6 +102,12 @@ public class CatBehavior : MonoBehaviour
 		{
 			timer = 0.0f;
 			slowDown = false;
+		}
+
+		if(caught >= 3)
+		{
+			// ends cat quest 
+			//GameManager.instance
 		}
 
 	}
@@ -145,6 +157,7 @@ public class CatBehavior : MonoBehaviour
 	// happens if control spell used on cat 
 	IEnumerator<BTState> Flee()
 	{
+		caught += 1; 
 		Debug.Log("Initiate Flee"); 
 		slowDown = false;
 
