@@ -7,7 +7,9 @@ using UnityEngine.AI;
 public class ToxicController : MonoBehaviour
 {
     // Start is called before the first frame update
-    private float bunnyTimer = 5.0f; 
+    [SerializeField]
+    private float timer = 20.0f; 
+    private float bunnyTimer; 
     private bool initiateDustBunny = false;
     private float radius = 10.0f;
     [SerializeField]
@@ -18,7 +20,7 @@ public class ToxicController : MonoBehaviour
 
 	void Start()
     {
-        
+        bunnyTimer = timer;
     }
 
     // Update is called once per frame
@@ -33,7 +35,7 @@ public class ToxicController : MonoBehaviour
         {
             initiateDustBunny = true;
             SpawnBunnies();
-            bunnyTimer = 5.0f; 
+            bunnyTimer = timer; 
 
 		}
 
