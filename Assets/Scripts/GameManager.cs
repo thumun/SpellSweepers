@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
     public GameObject completionStar3;
 
     public GameObject canvasGameOver;
+    public GameObject canvasLevelClear;
 
     [SerializeField]
     private float timer;
@@ -68,6 +69,7 @@ public class GameManager : MonoBehaviour
         completionStar3.SetActive(false);
 
         canvasGameOver.SetActive(false);
+        canvasLevelClear.SetActive(false);
     }
 
     void Update() {
@@ -127,9 +129,11 @@ public class GameManager : MonoBehaviour
     }
 
     public void LevelClear() {
+        if (!isLevelClear) {
+            clock.GetComponent<AudioClipPlayer>().StopClip();
+            doorAnimator.Play("DoorOpen", 0, 0.0f);
+        }
         isLevelClear = true;
-        clock.GetComponent<AudioClipPlayer>().StopClip();
-        doorAnimator.Play("DoorOpen", 0, 0.0f);
 
         int numStars = 1;
         if (!cauldronFailed) numStars++;
@@ -145,6 +149,7 @@ public class GameManager : MonoBehaviour
             completionStar2.SetActive(true);
             completionStar3.SetActive(true);
         }
+        canvasLevelClear.SetActive(true);
 
         Debug.Log("Level clear");
     }
