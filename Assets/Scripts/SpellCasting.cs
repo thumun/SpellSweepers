@@ -39,6 +39,8 @@ using System.Security;
 using UnityEditor.Search;
 using UnityEditor.PackageManager;
 using TMPro;
+using UnityEngine.SceneManagement;
+
 
 #endif
 
@@ -321,6 +323,11 @@ public class SpellCasting : MonoBehaviour
 
 		bool button_a_left = OVRInput.Get(OVRInput.Button.One);
         bool button_a_right = OVRInput.Get(OVRInput.Button.Two);
+
+        if (button_a_left || button_a_right)
+        {
+			bool debugHit = checkUIHit();
+		}
 
 		// if button pressed -> select object (if object exists with knock over tag) 
 		if ((button_a_left || button_a_right) && currentSpell != SPELLS.NONE)
@@ -658,6 +665,11 @@ public class SpellCasting : MonoBehaviour
 
 					return true;
 				}
+                else if (hitInfo.transform.CompareTag("StartBtn"))
+                {
+					SceneManager.LoadScene(0);
+					return false;
+                }
 				//return hitInfo.transform;
 			}
             
@@ -674,6 +686,44 @@ public class SpellCasting : MonoBehaviour
 					selectedObject.transform.GetChild(0).gameObject.GetComponent<Renderer>().material.color = selectedColor;
 
 					return true; 
+				}
+                else if (hitInfo.transform.CompareTag("StartBtn"))
+                {
+					SceneManager.LoadScene(0);
+					return false;
+                }
+				//return hitInfo.transform;
+			}
+		}
+		return false;
+	}
+
+    private bool checkUIHit()
+    {
+		if (leftLaser || rightLaser)
+		{
+			RaycastHit hitInfo = new RaycastHit();
+
+			Ray leftRay = new Ray(leftLaser.position, leftLaser.forward);
+			bool leftHit = Physics.Raycast(leftRay, out hitInfo);
+			if (leftHit)
+			{
+				if (hitInfo.transform.CompareTag("StartBtn"))
+				{
+					SceneManager.LoadScene(0);
+					return false;
+				}
+				//return hitInfo.transform;
+			}
+
+			Ray rightRay = new Ray(rightLaser.position, rightLaser.forward);
+			bool rightHit = /*!leftHit &&*/ Physics.Raycast(rightRay, out hitInfo);
+			if (rightHit)
+			{
+				if (hitInfo.transform.CompareTag("StartBtn"))
+				{
+					SceneManager.LoadScene(0);
+					return false;
 				}
 				//return hitInfo.transform;
 			}

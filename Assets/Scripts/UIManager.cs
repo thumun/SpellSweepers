@@ -26,8 +26,9 @@ public class UIManager : MonoBehaviour
     public TextMeshPro textProgressPoints;
     public TextMeshPro textCauldron;
     public Transform transformClockFinger;
+	public TextMeshPro textCat;
 
-    public Button btnGameOver;
+	public Button btnGameOver;
 
     private string maxBunnyCounterString;
     private string maxProgressString;

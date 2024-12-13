@@ -104,10 +104,16 @@ public class CatBehavior : MonoBehaviour
 			slowDown = false;
 		}
 
-		if(caught >= 3)
+		if (slowDown)
+		{
+			caught += 1;
+		}
+
+		if (caught >= 3)
 		{
 			// ends cat quest 
-			//GameManager.instance
+			//GameManager.instance.catHandled = true;
+			this.gameObject.SetActive(false);
 		}
 
 	}
@@ -157,7 +163,6 @@ public class CatBehavior : MonoBehaviour
 	// happens if control spell used on cat 
 	IEnumerator<BTState> Flee()
 	{
-		caught += 1; 
 		Debug.Log("Initiate Flee"); 
 		slowDown = false;
 
