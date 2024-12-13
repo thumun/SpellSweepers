@@ -3810,8 +3810,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 422e2841d45857148834d6ab06e9f73f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioClip: {fileID: 0}
-  loopAudio: 0
+  audioClip: {fileID: 8300000, guid: 5d5803804b4fc25419e3cabf2ee83ea9, type: 3}
+  loopAudio: 1
 --- !u!4 &1166002167 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8985551412366165213, guid: 275a56574b60b7d468433ca85d90db70, type: 3}
@@ -6622,6 +6622,7 @@ MonoBehaviour:
   - {fileID: 1492646280}
   - {fileID: 1209904541}
   timer: 0
+  clock: {fileID: 1079530092}
   doorAnimator: {fileID: 20355474}
 --- !u!4 &2019757592
 Transform:

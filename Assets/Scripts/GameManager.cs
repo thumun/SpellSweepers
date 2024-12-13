@@ -35,6 +35,8 @@ public class GameManager : MonoBehaviour
     private float timer;
     private float maxTime;
 
+    public GameObject clock;
+
     public Animator doorAnimator;
 
     // For UI
@@ -106,11 +108,13 @@ public class GameManager : MonoBehaviour
 
     public void GameOver() {
         isGameOver = true;
+        clock.GetComponent<AudioClipPlayer>().StopClip();
         Debug.Log("Game over");
     }
 
     public void LevelClear() {
         isLevelClear = true;
+        clock.GetComponent<AudioClipPlayer>().StopClip();
         doorAnimator.Play("DoorOpen", 0, 0.0f);
         Debug.Log("Level clear");
     }
