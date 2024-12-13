@@ -640,8 +640,7 @@ public class SpellCasting : MonoBehaviour
 			{
                 // lower time 
                 //CauldronController cauldron = selectedObject.GetComponent<CauldronController>();
-                CauldronController.instance.timeToExplode += 500;
-                //cauldron.timeToExplode -= 500;
+                CauldronController.instance.timeToExplode -= 1000;
 				slowActive = false;
 				//selectedObject.gameObject.GetComponent<Renderer>().material.color = originalObjColor;
 				selectedObject = null;
@@ -672,7 +671,7 @@ public class SpellCasting : MonoBehaviour
 			bool leftHit = Physics.Raycast(leftRay, out hitInfo);
 			if (leftHit)
 			{
-                if (hitInfo.transform.CompareTag("KnockOver") || hitInfo.transform.CompareTag("ToxicBottle") || hitInfo.transform.CompareTag("Cauldron") || hitInfo.transform.CompareTag("Cat"))
+                if ((hitInfo.transform.CompareTag("KnockOver") || hitInfo.transform.CompareTag("ToxicBottle")) && currentSpell != SPELLS.SLOWDOWN)
                 {
 					// select object 
 					selectedObject = hitInfo.transform;
@@ -699,7 +698,7 @@ public class SpellCasting : MonoBehaviour
 			bool rightHit = /*!leftHit &&*/ Physics.Raycast(rightRay, out hitInfo);
 			if (rightHit)
 			{
-				if (hitInfo.transform.CompareTag("KnockOver") || hitInfo.transform.CompareTag("ToxicBottle"))
+				if ((hitInfo.transform.CompareTag("KnockOver") || hitInfo.transform.CompareTag("ToxicBottle")) && currentSpell != SPELLS.SLOWDOWN)
 				{
 					// select object 
 					selectedObject = hitInfo.transform;
