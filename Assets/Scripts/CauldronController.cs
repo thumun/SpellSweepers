@@ -47,7 +47,7 @@ public class CauldronController : MonoBehaviour
     private float solvedColorTimerMax = 5.0f;
 
     public int timeToExplode;
-    private int explosionTime = 10000;
+    private int explosionTime = 20000;
     // min scale = 0.13, max scale = 0.53;
     private float scaleDiff = 0.4f;
 

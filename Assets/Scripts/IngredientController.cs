@@ -16,7 +16,9 @@ public class IngredientController : MonoBehaviour
 
     private float surfaceHeight = 0.0f;
 
-    [SerializeField]
+	public AudioClip ingredientSound;
+
+	[SerializeField]
     private bool inCauldron = false;
     
     [SerializeField]
@@ -38,7 +40,9 @@ public class IngredientController : MonoBehaviour
         if (diff < 0) {
             m_rigidbody.AddForceAtPosition(Vector3.up * floatingPower * Mathf.Abs(diff), transform.position, ForceMode.Force);
             if (!underwater) {
-                underwater = true;
+				AudioSource audio = GetComponent<AudioSource>();
+				audio.Play();
+				underwater = true;
                 UpdateState();
             }
         } else if (underwater) {

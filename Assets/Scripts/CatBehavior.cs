@@ -28,6 +28,8 @@ public class CatBehavior : MonoBehaviour
 
 	private Transform prevObj = null;
 
+	public AudioClip catSound; 
+
 	public int caught = 0;
 
 	// need to add anim controller for NPC 
@@ -64,7 +66,7 @@ public class CatBehavior : MonoBehaviour
 		{
 			timer += Time.deltaTime;
 		}
-		
+
 		// testing purposes --> testing the control spell 
 		//if (Input.GetKeyDown(KeyCode.W))
 		//{
@@ -112,6 +114,8 @@ public class CatBehavior : MonoBehaviour
 		if (caught >= 3)
 		{
 			// ends cat quest 
+			AudioSource audio = GetComponent<AudioSource>();
+			audio.Play();
 			UIManager.instance.textCat.text = "Banished!";
 			GameManager.instance.HandledCat();
 			this.gameObject.SetActive(false);
