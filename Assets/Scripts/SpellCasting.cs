@@ -334,7 +334,7 @@ public class SpellCasting : MonoBehaviour
 		if ((button_a_left || button_a_right) && currentSpell != SPELLS.NONE)
         {
             if (selectTimer >= 0.2f)
-            {
+            { 
                 if (selectedObject != null && currentSpell == SPELLS.CONTROL)
                 {
                     ctrlActive = false;

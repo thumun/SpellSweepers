@@ -136,7 +136,7 @@ public class GameManager : MonoBehaviour
         //if (dustBunnyCounter >= dustBunnies.Length) return;
 
         dustBunnyCounter += 1;
-        IncrementProgressPoints(10);
+        IncrementProgressPoints(4);
         GainMana(10.0f);
         UIManager.instance.UpdateDustBunnyCounter(dustBunnyCounter);
         UIManager.instance.UpdateProgressPoints(currentProgressPoints);
