@@ -34,10 +34,10 @@ using UnityEngine.Networking;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 using System.Linq.Expressions;
-using Palmmedia.ReportGenerator.Core.CodeAnalysis;
+//using Palmmedia.ReportGenerator.Core.CodeAnalysis;
 using System.Security;
-using UnityEditor.Search;
-using UnityEditor.PackageManager;
+//using UnityEditor.Search;
+//using UnityEditor.PackageManager;
 using TMPro;
 using UnityEngine.SceneManagement;
 
@@ -363,7 +363,12 @@ public class SpellCasting : MonoBehaviour
                         ctrlActive = false;
                         vacuumActive = false;
                         slowActive = false;
-                        currentSpell = SPELLS.NONE;
+                        if (active_controller_cone != null)
+                        {
+							active_controller_cone.SetActive(false);
+
+						}
+						currentSpell = SPELLS.NONE;
                     }
                 }
 
