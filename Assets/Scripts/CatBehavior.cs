@@ -6,7 +6,7 @@ using BTAI;
 using UnityEngine.Experimental.XR.Interaction;
 using System.Threading;
 using UnityEngine.InputSystem.HID;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
+//using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public class CatBehavior : MonoBehaviour
 {
@@ -109,13 +109,15 @@ public class CatBehavior : MonoBehaviour
 		if (slowDown)
 		{
 			caught += 1;
+			AudioSource audio = GetComponent<AudioSource>();
+			audio.Play();
 		}
 
 		if (caught >= 3)
 		{
 			// ends cat quest 
-			AudioSource audio = GetComponent<AudioSource>();
-			audio.Play();
+			//AudioSource audio = GetComponent<AudioSource>();
+			//audio.Play();
 			UIManager.instance.textCat.text = "Banished!";
 			GameManager.instance.HandledCat();
 			this.gameObject.SetActive(false);
