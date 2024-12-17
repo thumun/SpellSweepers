@@ -4,7 +4,7 @@ Spell Sweepers is designed for one player ages eight and up, with each level tak
 
 ## Trailer 
 
-insert here 
+https://drive.google.com/file/d/1kgYzHe1pRckZ9zZzTzBYTAJfpNnwuzIf/view?usp=sharing
 
 ## How to Play! 
 
@@ -40,3 +40,6 @@ Player Controls
 - Cauldron made by Alan following this tutorial: https://www.youtube.com/watch?v=cubiePWDq5c
 - Walls, Floor, Ceiling, Clock models and textures: Made by Alan 
 
+## Non-Unity Plug-Ins Used
+-  [MiVRy](https://www.marui-plugin.com/mivry/)
+-  [Meta XR All-in-One SDK](https://assetstore.unity.com/packages/tools/integration/meta-xr-all-in-one-sdk-269657?utm_source=google&utm_medium=cpc&utm_campaign=as_as_as_amer_amer-t1_en_pu_dsp-pmax_acq_pr_2024-04_x_cc3022_ev_id:71700000118169934&utm_content=_id:_SpringSalePMAX2023_&utm_term=&gad_source=1&gclid=Cj0KCQiAvP-6BhDyARIsAJ3uv7ZIX7zaPA_8T3UJ4KsLQKgEiPuNI9U9aklK57uhXUIlFID8YOeIveYaAkTNEALw_wcB&gclsrc=aw.ds)
